@@ -1,0 +1,112 @@
+import React from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
+import { Building2, GraduationCap, Lightbulb, Settings, Users, Network, ArrowRight } from 'lucide-react';
+import { servicesData } from '../mock';
+
+const iconMap = {
+  Building2,
+  GraduationCap,
+  Lightbulb,
+  Settings,
+  Users,
+  Network
+};
+
+export const Services = () => {
+  return (
+    <section id="services" className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <Badge className="bg-emerald-100 text-emerald-800 px-4 py-2 text-sm font-medium mb-4">
+            Our Services
+          </Badge>
+          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            Comprehensive Solutions for
+            <span className="text-emerald-600"> Social Impact</span>
+          </h2>
+          <p className="text-xl text-gray-600 leading-relaxed">
+            We offer a full spectrum of services designed to empower organizations, 
+            individuals, and communities to create lasting positive change.
+          </p>
+        </div>
+
+        {/* Services Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {servicesData.map((service, index) => {
+            const IconComponent = iconMap[service.icon];
+            
+            return (
+              <Card 
+                key={service.id} 
+                className="group hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border-0 shadow-lg bg-gradient-to-br from-white to-gray-50/50"
+              >
+                <CardHeader className="pb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <IconComponent className="w-8 h-8 text-white" />
+                  </div>
+                  <CardTitle className="text-xl font-bold text-gray-900 group-hover:text-emerald-600 transition-colors duration-300">
+                    {service.title}
+                  </CardTitle>
+                  <CardDescription className="text-gray-600 leading-relaxed">
+                    {service.description}
+                  </CardDescription>
+                </CardHeader>
+                
+                <CardContent className="pt-0">
+                  <div className="space-y-3 mb-6">
+                    {service.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                        <span className="text-sm text-gray-700 font-medium">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <Button 
+                    variant="ghost" 
+                    className="w-full group-hover:bg-emerald-50 group-hover:text-emerald-700 transition-all duration-300 justify-between"
+                  >
+                    Learn More
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+
+        {/* Call to Action */}
+        <div className="mt-16 text-center">
+          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-3xl p-8 lg:p-12 border border-emerald-100">
+            <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">
+              Ready to Create Impact Together?
+            </h3>
+            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+              Let's discuss how our services can help you achieve your social impact goals 
+              and create meaningful change in your community.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              >
+                Schedule Consultation
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300"
+              >
+                Download Service Guide
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};

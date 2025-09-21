@@ -1,0 +1,116 @@
+import React from 'react';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { ArrowRight, CheckCircle, Users, Target, Award, Globe } from 'lucide-react';
+import { heroData } from '../mock';
+
+export const Hero = () => {
+  return (
+    <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-white to-teal-50"></div>
+      
+      {/* Decorative Elements */}
+      <div className="absolute top-20 right-20 w-72 h-72 bg-gradient-to-r from-emerald-100/30 to-teal-100/30 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 left-20 w-96 h-96 bg-gradient-to-r from-teal-100/20 to-emerald-100/20 rounded-full blur-3xl"></div>
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Content */}
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 px-4 py-2 text-sm font-medium">
+                🌱 Leading Social Innovation in Greece
+              </Badge>
+              
+              <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                {heroData.title}
+              </h1>
+              
+              <div className="text-2xl font-semibold text-emerald-600 mb-4">
+                {heroData.subtitle}
+              </div>
+              
+              <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
+                {heroData.description}
+              </p>
+            </div>
+
+            {/* Key Features */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { icon: Users, text: "Supporting Vulnerable Communities" },
+                { icon: Target, text: "Evidence-Based Impact" },
+                { icon: Award, text: "EU-Recognized Excellence" },
+                { icon: Globe, text: "Pan-Hellenic Reach" }
+              ].map((feature, index) => (
+                <div key={index} className="flex items-center space-x-3 p-3 rounded-lg bg-white/50 backdrop-blur-sm border border-emerald-100">
+                  <feature.icon className="w-5 h-5 text-emerald-600" />
+                  <span className="text-gray-700 font-medium">{feature.text}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-8 py-4 text-lg"
+              >
+                {heroData.cta}
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="border-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-300 px-8 py-4 text-lg"
+              >
+                Watch Our Story
+              </Button>
+            </div>
+          </div>
+
+          {/* Right Content - Stats */}
+          <div className="lg:pl-12">
+            <div className="grid grid-cols-2 gap-6">
+              {heroData.stats.map((stat, index) => (
+                <div key={index} className="bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  <div className="text-3xl lg:text-4xl font-bold text-emerald-600 mb-2">
+                    {stat.number}
+                  </div>
+                  <div className="text-gray-700 font-medium leading-snug">
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="mt-8 p-6 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg border border-white/20">
+              <div className="flex items-center space-x-2 mb-4">
+                <CheckCircle className="w-5 h-5 text-emerald-600" />
+                <span className="font-semibold text-gray-900">Trusted by Leading Organizations</span>
+              </div>
+              <div className="text-sm text-gray-600 space-y-1">
+                <div>• European Commission Partners</div>
+                <div>• Greek Ministry of Development Collaboration</div>
+                <div>• Regional Development Agencies</div>
+                <div>• 100+ NGOs and Social Enterprises</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+        <div className="animate-bounce">
+          <div className="w-8 h-12 border-2 border-emerald-300 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-emerald-500 rounded-full mt-2 animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
