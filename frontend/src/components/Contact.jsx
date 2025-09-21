@@ -1,0 +1,257 @@
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Textarea } from './ui/textarea';
+import { 
+  Phone, 
+  Mail, 
+  MapPin, 
+  Clock, 
+  Send, 
+  MessageSquare, 
+  Users, 
+  Building,
+  Facebook,
+  Linkedin,
+  Twitter,
+  Instagram
+} from 'lucide-react';
+import { contactData } from '../mock';
+
+export const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    organization: '',
+    subject: '',
+    message: ''
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission (mock for now)
+    console.log('Form submitted:', formData);
+    alert('Thank you for your message! We will get back to you soon.');
+    setFormData({ name: '', email: '', organization: '', subject: '', message: '' });
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  return (
+    <section id="contact" className="py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <Badge className="bg-emerald-100 text-emerald-800 px-4 py-2 text-sm font-medium mb-4">
+            Get In Touch
+          </Badge>
+          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            Let's Create Impact
+            <span className="text-emerald-600"> Together</span>
+          </h2>
+          <p className="text-xl text-gray-600 leading-relaxed">
+            Ready to start your social impact journey? We're here to help you every step of the way.
+            Reach out to discuss your ideas, challenges, or collaboration opportunities.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-3 gap-12">
+          {/* Contact Information */}
+          <div className="lg:col-span-1 space-y-8">
+            <Card className="shadow-lg border-0 bg-gradient-to-br from-emerald-50 to-teal-50">
+              <CardHeader>
+                <CardTitle className="text-xl font-bold text-gray-900 flex items-center">
+                  <MessageSquare className="w-6 h-6 text-emerald-600 mr-3" />
+                  Contact Information
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <MapPin className="w-5 h-5 text-emerald-600 mt-1" />
+                  <div>
+                    <div className="font-medium text-gray-900">Address</div>
+                    <div className="text-gray-600 text-sm">{contactData.address}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                  <Phone className="w-5 h-5 text-emerald-600" />
+                  <div>
+                    <div className="font-medium text-gray-900">Phone</div>
+                    <div className="text-gray-600 text-sm">{contactData.phone}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                  <Mail className="w-5 h-5 text-emerald-600" />
+                  <div>
+                    <div className="font-medium text-gray-900">Email</div>
+                    <div className="text-gray-600 text-sm">{contactData.email}</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3">
+                  <Clock className="w-5 h-5 text-emerald-600 mt-1" />
+                  <div>
+                    <div className="font-medium text-gray-900">Working Hours</div>
+                    <div className="text-gray-600 text-sm">{contactData.workingHours}</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Contact Options */}
+            <div className="space-y-4">
+              <h3 className="font-bold text-gray-900 text-lg">Quick Actions</h3>
+              
+              <Button 
+                variant="outline" 
+                className="w-full justify-start border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300"
+              >
+                <Users className="w-4 h-4 mr-3" />
+                Schedule a Consultation
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                className="w-full justify-start border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300"
+              >
+                <Building className="w-4 h-4 mr-3" />
+                Partnership Inquiry
+              </Button>
+            </div>
+
+            {/* Social Media */}
+            <div>
+              <h3 className="font-bold text-gray-900 text-lg mb-4">Follow Us</h3>
+              <div className="flex space-x-4">
+                {[
+                  { icon: Linkedin, href: contactData.socialMedia.linkedin, color: 'hover:text-blue-600' },
+                  { icon: Facebook, href: contactData.socialMedia.facebook, color: 'hover:text-blue-700' },
+                  { icon: Twitter, href: contactData.socialMedia.twitter, color: 'hover:text-sky-500' },
+                  { icon: Instagram, href: contactData.socialMedia.instagram, color: 'hover:text-pink-600' }
+                ].map((social, index) => (
+                  <a
+                    key={index}
+                    href={social.href}
+                    className={`w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-600 transition-colors duration-300 ${social.color}`}
+                  >
+                    <social.icon className="w-5 h-5" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div className="lg:col-span-2">
+            <Card className="shadow-2xl border-0">
+              <CardHeader>
+                <CardTitle className="text-2xl font-bold text-gray-900">
+                  Send us a Message
+                </CardTitle>
+                <p className="text-gray-600">
+                  Fill out the form below and we'll get back to you within 24 hours.
+                </p>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Full Name *
+                      </label>
+                      <Input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        placeholder="Enter your full name"
+                        className="border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Email Address *
+                      </label>
+                      <Input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        placeholder="Enter your email address"
+                        className="border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Organization
+                      </label>
+                      <Input
+                        type="text"
+                        name="organization"
+                        value={formData.organization}
+                        onChange={handleChange}
+                        placeholder="Your organization name"
+                        className="border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Subject *
+                      </label>
+                      <Input
+                        type="text"
+                        name="subject"
+                        value={formData.subject}
+                        onChange={handleChange}
+                        required
+                        placeholder="What's this about?"
+                        className="border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Message *
+                    </label>
+                    <Textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                      rows={6}
+                      placeholder="Tell us more about how we can help you..."
+                      className="border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                    />
+                  </div>
+
+                  <Button 
+                    type="submit"
+                    size="lg"
+                    className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  >
+                    <Send className="w-5 h-5 mr-2" />
+                    Send Message
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
