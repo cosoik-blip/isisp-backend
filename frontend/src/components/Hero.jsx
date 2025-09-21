@@ -1,10 +1,38 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { ArrowRight, CheckCircle, Users, Target, Award, Globe } from 'lucide-react';
-import { heroData } from '../mock';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 export const Hero = () => {
+  const [heroStats, setHeroStats] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchHeroStats();
+  }, []);
+
+  const fetchHeroStats = async () => {
+    try {
+      const response = await axios.get(`${API}/settings/hero_stats`);
+      setHeroStats(response.data.stats || []);
+    } catch (err) {
+      console.error('Error fetching hero stats:', err);
+      // Fallback to default stats if API fails
+      setHeroStats([
+        { number: "500+", label: "Social Enterprises Supported" },
+        { number: "50+", label: "Training Programs Delivered" },
+        { number: "15", label: "Regions Covered" },
+        { number: "10K+", label: "Lives Impacted" }
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Elements */}
@@ -24,15 +52,15 @@ export const Hero = () => {
               </Badge>
               
               <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                {heroData.title}
+                Empowering Social Change Through Innovation
               </h1>
               
               <div className="text-2xl font-semibold text-emerald-600 mb-4">
-                {heroData.subtitle}
+                Three Thirds Society (3TS)
               </div>
               
               <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
-                {heroData.description}
+                We are a leading social economy organization dedicated to improving the quality of life for disadvantaged and vulnerable social groups through innovative solutions, training, and sustainable development programs.
               </p>
             </div>
 
@@ -57,7 +85,7 @@ export const Hero = () => {
                 size="lg" 
                 className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-8 py-4 text-lg"
               >
-                {heroData.cta}
+                Explore Our Impact
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
               
@@ -74,16 +102,26 @@ export const Hero = () => {
           {/* Right Content - Stats */}
           <div className="lg:pl-12">
             <div className="grid grid-cols-2 gap-6">
-              {heroData.stats.map((stat, index) => (
-                <div key={index} className="bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                  <div className="text-3xl lg:text-4xl font-bold text-emerald-600 mb-2">
-                    {stat.number}
+              {loading ? (
+                // Loading state
+                Array.from({ length: 4 }).map((_, index) => (
+                  <div key={index} className="bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20 animate-pulse">
+                    <div className="h-8 bg-emerald-200 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded"></div>
                   </div>
-                  <div className="text-gray-700 font-medium leading-snug">
-                    {stat.label}
+                ))
+              ) : (
+                heroStats.map((stat, index) => (
+                  <div key={index} className="bg-white/70 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    <div className="text-3xl lg:text-4xl font-bold text-emerald-600 mb-2">
+                      {stat.number}
+                    </div>
+                    <div className="text-gray-700 font-medium leading-snug">
+                      {stat.label}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
 
             {/* Trust Indicators */}
