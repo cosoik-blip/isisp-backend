@@ -4,6 +4,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Services } from "./components/Services";
+import { Projects } from "./components/Projects";
+import { Training } from "./components/Training";
+import { Resources } from "./components/Resources";
+import { Contact } from "./components/Contact";
+import { Footer } from "./components/Footer";
 
 const Home = () => {
   return (
@@ -11,6 +16,11 @@ const Home = () => {
       <Header />
       <Hero />
       <Services />
+      <Projects />
+      <Training />
+      <Resources />
+      <Contact />
+      <Footer />
     </div>
   );
 };
