@@ -10,7 +10,10 @@ from contextlib import asynccontextmanager
 from database import init_database, seed_initial_data, close_database
 
 # Import route modules
-from routes import services, projects, contact, settings
+from routes.services import router as services_router
+from routes.projects import router as projects_router
+from routes.contact import router as contact_router
+from routes.settings import router as settings_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -60,10 +63,10 @@ async def health_check():
     }
 
 # Include route modules
-app.include_router(services.router)
-app.include_router(projects.router)
-app.include_router(contact.router)
-app.include_router(settings.router)
+app.include_router(services_router)
+app.include_router(projects_router)
+app.include_router(contact_router)
+app.include_router(settings_router)
 
 # Include the main API router
 app.include_router(api_router)
