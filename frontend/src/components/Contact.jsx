@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -16,9 +16,14 @@ import {
   Facebook,
   Linkedin,
   Twitter,
-  Instagram
+  Instagram,
+  CheckCircle,
+  AlertCircle
 } from 'lucide-react';
-import { contactData } from '../mock';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 export const Contact = () => {
   const [formData, setFormData] = useState({
@@ -28,17 +33,89 @@ export const Contact = () => {
     subject: '',
     message: ''
   });
+  
+  const [contactInfo, setContactInfo] = useState({
+    address: "Pellis 2, Nea Filadelfia, Marousi, Attiki, Greece",
+    phone: "+30 211 7057627",
+    email: "info@3ts.gr",
+    workingHours: "Monday - Friday: 9:00 AM - 6:00 PM"
+  });
+  
+  const [formState, setFormState] = useState({
+    isSubmitting: false,
+    isSubmitted: false,
+    error: null
+  });
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    fetchContactInfo();
+  }, []);
+
+  const fetchContactInfo = async () => {
+    try {
+      const response = await axios.get(`${API}/settings/contact_info`);
+      setContactInfo(response.data);
+    } catch (err) {
+      console.error('Error fetching contact info:', err);
+      // Keep default contact info if API fails
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission (mock for now)
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! We will get back to you soon.');
-    setFormData({ name: '', email: '', organization: '', subject: '', message: '' });
+    
+    // Basic validation
+    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+      setFormState({
+        ...formState,
+        error: 'Please fill in all required fields.'
+      });
+      return;
+    }
+
+    setFormState({
+      isSubmitting: true,
+      isSubmitted: false,
+      error: null
+    });
+
+    try {
+      const response = await axios.post(`${API}/contact/`, formData);
+      
+      if (response.data.success) {
+        setFormState({
+          isSubmitting: false,
+          isSubmitted: true,
+          error: null
+        });
+        
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          organization: '',
+          subject: '',
+          message: ''
+        });
+      } else {
+        throw new Error(response.data.message || 'Failed to send message');
+      }
+    } catch (err) {
+      console.error('Error submitting contact form:', err);
+      setFormState({
+        isSubmitting: false,
+        isSubmitted: false,
+        error: err.response?.data?.detail || err.message || 'Failed to send message. Please try again.'
+      });
+    }
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Clear error when user starts typing
+    if (formState.error) {
+      setFormState({ ...formState, error: null });
+    }
   };
 
   return (
@@ -74,7 +151,7 @@ export const Contact = () => {
                   <MapPin className="w-5 h-5 text-emerald-600 mt-1" />
                   <div>
                     <div className="font-medium text-gray-900">Address</div>
-                    <div className="text-gray-600 text-sm">{contactData.address}</div>
+                    <div className="text-gray-600 text-sm">{contactInfo.address}</div>
                   </div>
                 </div>
                 
@@ -82,7 +159,7 @@ export const Contact = () => {
                   <Phone className="w-5 h-5 text-emerald-600" />
                   <div>
                     <div className="font-medium text-gray-900">Phone</div>
-                    <div className="text-gray-600 text-sm">{contactData.phone}</div>
+                    <div className="text-gray-600 text-sm">{contactInfo.phone}</div>
                   </div>
                 </div>
                 
@@ -90,7 +167,7 @@ export const Contact = () => {
                   <Mail className="w-5 h-5 text-emerald-600" />
                   <div>
                     <div className="font-medium text-gray-900">Email</div>
-                    <div className="text-gray-600 text-sm">{contactData.email}</div>
+                    <div className="text-gray-600 text-sm">{contactInfo.email}</div>
                   </div>
                 </div>
                 
@@ -98,7 +175,7 @@ export const Contact = () => {
                   <Clock className="w-5 h-5 text-emerald-600 mt-1" />
                   <div>
                     <div className="font-medium text-gray-900">Working Hours</div>
-                    <div className="text-gray-600 text-sm">{contactData.workingHours}</div>
+                    <div className="text-gray-600 text-sm">{contactInfo.workingHours}</div>
                   </div>
                 </div>
               </CardContent>
@@ -130,10 +207,10 @@ export const Contact = () => {
               <h3 className="font-bold text-gray-900 text-lg mb-4">Follow Us</h3>
               <div className="flex space-x-4">
                 {[
-                  { icon: Linkedin, href: contactData.socialMedia.linkedin, color: 'hover:text-blue-600' },
-                  { icon: Facebook, href: contactData.socialMedia.facebook, color: 'hover:text-blue-700' },
-                  { icon: Twitter, href: contactData.socialMedia.twitter, color: 'hover:text-sky-500' },
-                  { icon: Instagram, href: contactData.socialMedia.instagram, color: 'hover:text-pink-600' }
+                  { icon: Linkedin, href: "#", color: 'hover:text-blue-600' },
+                  { icon: Facebook, href: "#", color: 'hover:text-blue-700' },
+                  { icon: Twitter, href: "#", color: 'hover:text-sky-500' },
+                  { icon: Instagram, href: "#", color: 'hover:text-pink-600' }
                 ].map((social, index) => (
                   <a
                     key={index}
@@ -159,6 +236,25 @@ export const Contact = () => {
                 </p>
               </CardHeader>
               <CardContent>
+                {/* Success Message */}
+                {formState.isSubmitted && (
+                  <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center space-x-3">
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <div>
+                      <div className="font-medium text-green-800">Message sent successfully!</div>
+                      <div className="text-sm text-green-600">We'll get back to you within 24-48 hours.</div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Error Message */}
+                {formState.error && (
+                  <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-3">
+                    <AlertCircle className="w-5 h-5 text-red-600" />
+                    <div className="text-sm text-red-600">{formState.error}</div>
+                  </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
@@ -173,6 +269,7 @@ export const Contact = () => {
                         required
                         placeholder="Enter your full name"
                         className="border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                        disabled={formState.isSubmitting}
                       />
                     </div>
                     
@@ -188,6 +285,7 @@ export const Contact = () => {
                         required
                         placeholder="Enter your email address"
                         className="border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                        disabled={formState.isSubmitting}
                       />
                     </div>
                   </div>
@@ -204,6 +302,7 @@ export const Contact = () => {
                         onChange={handleChange}
                         placeholder="Your organization name"
                         className="border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                        disabled={formState.isSubmitting}
                       />
                     </div>
                     
@@ -219,6 +318,7 @@ export const Contact = () => {
                         required
                         placeholder="What's this about?"
                         className="border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                        disabled={formState.isSubmitting}
                       />
                     </div>
                   </div>
@@ -235,16 +335,27 @@ export const Contact = () => {
                       rows={6}
                       placeholder="Tell us more about how we can help you..."
                       className="border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                      disabled={formState.isSubmitting}
                     />
                   </div>
 
                   <Button 
                     type="submit"
                     size="lg"
-                    className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    disabled={formState.isSubmitting}
+                    className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                   >
-                    <Send className="w-5 h-5 mr-2" />
-                    Send Message
+                    {formState.isSubmitting ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Sending Message...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5 mr-2" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 </form>
               </CardContent>
