@@ -111,6 +111,9 @@ export const DynamicButton = ({
     }
   };
 
+  // Determine what text to show - prioritize buttonConfig.label, then children, then fallback
+  const displayText = buttonConfig?.label || fallbackText;
+  
   return (
     <div className="relative inline-block">
       <Button
@@ -120,7 +123,8 @@ export const DynamicButton = ({
         variant={getButtonVariant(buttonConfig?.buttonStyle)}
         className={`${getButtonClassName(buttonConfig?.buttonStyle)} ${className}`}
       >
-        {children || buttonConfig?.label || fallbackText}
+        {displayText}
+        {children}
       </Button>
       
       {/* Message Popup */}
