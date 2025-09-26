@@ -12,13 +12,15 @@ import {
   Eye,
   Edit,
   Plus,
-  Trash2
+  Trash2,
+  MousePointer
 } from 'lucide-react';
 import { AdminLogin } from './AdminLogin';
 import { ServicesManager } from './ServicesManager';
 import { ProjectsManager } from './ProjectsManager';
 import { SettingsManager } from './SettingsManager';
 import { InquiriesManager } from './InquiriesManager';
+import { ButtonsManager } from './ButtonsManager';
 
 export const AdminDashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -78,6 +80,7 @@ export const AdminDashboard = () => {
     { id: 'overview', label: 'Overview', icon: BarChart3 },
     { id: 'services', label: 'Services', icon: Briefcase },
     { id: 'projects', label: 'Projects', icon: Eye },
+    { id: 'buttons', label: 'Buttons', icon: MousePointer },
     { id: 'settings', label: 'Settings', icon: Settings },
     { id: 'inquiries', label: 'Inquiries', icon: MessageSquare },
   ];
@@ -101,8 +104,12 @@ export const AdminDashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">3TS</span>
+              <div className="w-10 h-10 flex items-center justify-center">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_better-3ts-web/artifacts/xg6h7k8b_image.png" 
+                  alt="3TS Logo"
+                  className="w-10 h-10 object-contain"
+                />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
@@ -170,6 +177,9 @@ export const AdminDashboard = () => {
             {activeSection === 'projects' && (
               <ProjectsManager authToken={authToken} />
             )}
+            {activeSection === 'buttons' && (
+              <ButtonsManager authToken={authToken} />
+            )}
             {activeSection === 'settings' && (
               <SettingsManager authToken={authToken} />
             )}
@@ -200,6 +210,12 @@ const OverviewSection = ({ dashboardData }) => {
       color: 'bg-green-500'
     },
     {
+      title: 'Button Configs',
+      value: dashboardData.buttons_count,
+      icon: MousePointer,
+      color: 'bg-indigo-500'
+    },
+    {
       title: 'Total Inquiries',
       value: dashboardData.total_inquiries,
       icon: MessageSquare,
@@ -221,7 +237,7 @@ const OverviewSection = ({ dashboardData }) => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           return (
