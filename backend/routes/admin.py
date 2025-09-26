@@ -6,13 +6,15 @@ from models import (
     Project, ProjectCreate, ProjectUpdate,
     CompanySetting, CompanySettingUpdate, CompanySettingCreate,
     ContactInquiry, ContactInquiryUpdate,
+    ButtonConfig, ButtonConfigCreate, ButtonConfigUpdate,
     APIResponse
 )
 from database import (
     services_collection, 
     projects_collection, 
     company_settings_collection, 
-    contact_inquiries_collection
+    contact_inquiries_collection,
+    button_configs_collection
 )
 from datetime import datetime
 import logging
@@ -47,6 +49,7 @@ async def get_dashboard_overview(admin_user: str = Depends(authenticate_admin)):
         # Get counts
         services_count = await services_collection.count_documents({"isActive": True})
         projects_count = await projects_collection.count_documents({"isActive": True})
+        buttons_count = await button_configs_collection.count_documents({})
         total_inquiries = await contact_inquiries_collection.count_documents({})
         new_inquiries = await contact_inquiries_collection.count_documents({"status": "new"})
         
@@ -62,6 +65,7 @@ async def get_dashboard_overview(admin_user: str = Depends(authenticate_admin)):
         stats = {
             "services_count": services_count,
             "projects_count": projects_count,
+            "buttons_count": buttons_count,
             "total_inquiries": total_inquiries,
             "new_inquiries": new_inquiries,
             "recent_inquiries": recent_inquiries
@@ -351,3 +355,88 @@ async def update_inquiry_status_admin(inquiry_id: str, status_update: ContactInq
     except Exception as e:
         logger.error(f"Error updating inquiry {inquiry_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to update inquiry status")
+
+# Button Configuration Management
+@router.get("/buttons", response_model=List[ButtonConfig])
+async def get_all_buttons_admin(admin_user: str = Depends(authenticate_admin)):
+    """Get all button configurations"""
+    try:
+        cursor = button_configs_collection.find().sort("section", 1).sort("order", 1)
+        buttons = await cursor.to_list(length=100)
+        
+        for button in buttons:
+            if "_id" in button:
+                del button["_id"]
+        
+        return buttons
+        
+    except Exception as e:
+        logger.error(f"Error retrieving admin buttons: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve buttons")
+
+@router.post("/buttons", response_model=APIResponse)
+async def create_button_admin(button: ButtonConfigCreate, admin_user: str = Depends(authenticate_admin)):
+    """Create a new button configuration"""
+    try:
+        button_obj = ButtonConfig(**button.dict())
+        result = await button_configs_collection.insert_one(button_obj.dict())
+        
+        if result.inserted_id:
+            logger.info(f"Admin {admin_user} created button: {button_obj.buttonId}")
+            return APIResponse(
+                success=True,
+                message="Button created successfully",
+                data={"id": button_obj.id}
+            )
+        else:
+            raise HTTPException(status_code=500, detail="Failed to create button")
+            
+    except Exception as e:
+        logger.error(f"Error creating button: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to create button")
+
+@router.put("/buttons/{button_id}", response_model=APIResponse)
+async def update_button_admin(button_id: str, button_update: ButtonConfigUpdate, admin_user: str = Depends(authenticate_admin)):
+    """Update a button configuration"""
+    try:
+        update_data = {k: v for k, v in button_update.dict().items() if v is not None}
+        
+        if not update_data:
+            raise HTTPException(status_code=400, detail="No valid fields to update")
+        
+        update_data["updatedAt"] = datetime.utcnow()
+        
+        result = await button_configs_collection.update_one(
+            {"buttonId": button_id},
+            {"$set": update_data}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Button not found")
+        
+        logger.info(f"Admin {admin_user} updated button {button_id}")
+        return APIResponse(success=True, message="Button updated successfully")
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating button {button_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to update button")
+
+@router.delete("/buttons/{button_id}", response_model=APIResponse)
+async def delete_button_admin(button_id: str, admin_user: str = Depends(authenticate_admin)):
+    """Delete a button configuration"""
+    try:
+        result = await button_configs_collection.delete_one({"buttonId": button_id})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Button not found")
+        
+        logger.info(f"Admin {admin_user} deleted button {button_id}")
+        return APIResponse(success=True, message="Button deleted successfully")
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting button {button_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to delete button")
