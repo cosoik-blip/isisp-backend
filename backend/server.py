@@ -14,6 +14,7 @@ from routes.services import router as services_router
 from routes.projects import router as projects_router
 from routes.contact import router as contact_router
 from routes.settings import router as settings_router
+from routes.admin import router as admin_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
