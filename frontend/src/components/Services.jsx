@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { Building2, GraduationCap, Lightbulb, Settings, Users, Network, ArrowRight } from 'lucide-react';
+import { Building2, GraduationCap, Lightbulb, Settings, Users, Network, ArrowRight, Download } from 'lucide-react';
+import { DynamicButton } from './DynamicButton';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -118,13 +119,15 @@ export const Services = () => {
                     ))}
                   </div>
                   
-                  <Button 
-                    variant="ghost" 
-                    className="w-full group-hover:bg-emerald-50 group-hover:text-emerald-700 transition-all duration-300 justify-between"
+                  <DynamicButton 
+                    buttonId={`service_learn_more_${service.id}`}
+                    fallbackText="Learn More"
+                    fallbackStyle="outline"
+                    className="w-full justify-between"
                   >
                     Learn More
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                  </Button>
+                  </DynamicButton>
                 </CardContent>
               </Card>
             );
@@ -152,9 +155,7 @@ export const Services = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-6 py-3 bg-white border border-emerald-200 text-emerald-700 rounded-lg hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-300 shadow-md hover:shadow-lg"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd" />
-                  </svg>
+                  <Download className="w-5 h-5 mr-2" />
                   Download 3TS Profile
                 </a>
                 <a
@@ -163,29 +164,27 @@ export const Services = () => {
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-6 py-3 bg-white border border-emerald-200 text-emerald-700 rounded-lg hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-300 shadow-md hover:shadow-lg"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd" />
-                  </svg>
+                  <Download className="w-5 h-5 mr-2" />
                   Download 3TS PIF
                 </a>
               </div>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+              <DynamicButton 
+                buttonId="services_cta_primary"
+                fallbackText="Schedule Consultation"
+                size="lg"
               >
-                Schedule Consultation
                 <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300"
-              >
-                Contact Us Today
-              </Button>
+              </DynamicButton>
+              
+              <DynamicButton 
+                buttonId="services_cta_secondary"
+                fallbackText="Contact Us Today"
+                fallbackStyle="outline"
+                size="lg"
+              />
             </div>
           </div>
         </div>
