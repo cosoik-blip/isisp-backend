@@ -41,8 +41,12 @@ export const Header = () => {
           <div className="flex justify-between items-center py-4">
             {/* Logo */}
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-lg">3TS</span>
+              <div className="w-12 h-12 flex items-center justify-center">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_better-3ts-web/artifacts/xg6h7k8b_image.png" 
+                  alt="Three Thirds Society Logo"
+                  className="w-12 h-12 object-contain"
+                />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Three Thirds Society</h1>
