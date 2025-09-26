@@ -135,13 +135,15 @@ export const Projects = () => {
                     </div>
                   </div>
 
-                  <Button 
-                    variant="ghost" 
-                    className="w-full group-hover:bg-emerald-50 group-hover:text-emerald-700 transition-all duration-300 justify-between"
+                  <DynamicButton 
+                    buttonId={`project_details_${project.id}`}
+                    fallbackText="View Project Details"
+                    fallbackStyle="outline"
+                    className="w-full justify-between"
                   >
                     View Project Details
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                  </Button>
+                  </DynamicButton>
                 </div>
               </CardContent>
             </Card>
