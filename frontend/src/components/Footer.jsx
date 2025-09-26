@@ -23,8 +23,12 @@ export const Footer = () => {
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-lg">3TS</span>
+              <div className="w-12 h-12 flex items-center justify-center">
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_better-3ts-web/artifacts/xg6h7k8b_image.png" 
+                  alt="Three Thirds Society Logo"
+                  className="w-12 h-12 object-contain"
+                />
               </div>
               <div>
                 <h3 className="text-xl font-bold">Three Thirds Society</h3>
