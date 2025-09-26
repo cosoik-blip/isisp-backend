@@ -132,6 +132,41 @@ class TeamMemberUpdate(BaseModel):
     isActive: Optional[bool] = None
     order: Optional[int] = None
 
+# New Button Configuration Models
+class ButtonConfig(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    buttonId: str  # Unique identifier for the button (e.g., 'hero_cta_primary')
+    section: str   # Which section it belongs to (e.g., 'hero', 'services', 'projects')
+    label: str     # Button text
+    isVisible: bool = True
+    clickAction: str = "none"  # 'none', 'show_message', 'redirect', 'download'
+    clickMessage: Optional[str] = None  # Message to show on click
+    redirectUrl: Optional[str] = None   # URL for redirect action
+    buttonStyle: str = "primary"  # 'primary', 'secondary', 'outline'
+    order: int = 0
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+
+class ButtonConfigCreate(BaseModel):
+    buttonId: str
+    section: str
+    label: str
+    isVisible: bool = True
+    clickAction: str = "none"
+    clickMessage: Optional[str] = None
+    redirectUrl: Optional[str] = None
+    buttonStyle: str = "primary"
+    order: int = 0
+
+class ButtonConfigUpdate(BaseModel):
+    label: Optional[str] = None
+    isVisible: Optional[bool] = None
+    clickAction: Optional[str] = None
+    clickMessage: Optional[str] = None
+    redirectUrl: Optional[str] = None
+    buttonStyle: Optional[str] = None
+    order: Optional[int] = None
+
 # Response Models
 class APIResponse(BaseModel):
     success: bool

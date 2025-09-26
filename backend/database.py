@@ -17,6 +17,7 @@ projects_collection = db.projects
 contact_inquiries_collection = db.contact_inquiries
 company_settings_collection = db.company_settings
 team_members_collection = db.team_members
+button_configs_collection = db.button_configs
 
 async def init_database():
     """Initialize database with indexes and default data"""
@@ -35,6 +36,9 @@ async def init_database():
     
     await team_members_collection.create_index("order")
     await team_members_collection.create_index("isActive")
+    
+    await button_configs_collection.create_index("buttonId", unique=True)
+    await button_configs_collection.create_index("section")
     
     print("Database initialized with indexes")
 
@@ -193,12 +197,77 @@ async def seed_initial_data():
         }
     ]
     
+    # Button configurations
+    button_configs_data = [
+        {
+            "buttonId": "hero_cta_primary",
+            "section": "hero",
+            "label": "Explore Our Impact",
+            "isVisible": True,
+            "clickAction": "show_message",
+            "clickMessage": "Thank you for your interest! We are making a real difference in communities across Greece. Contact us to learn more about how we can work together.",
+            "buttonStyle": "primary",
+            "order": 1
+        },
+        {
+            "buttonId": "hero_cta_secondary",
+            "section": "hero",
+            "label": "Watch Our Story",
+            "isVisible": True,
+            "clickAction": "show_message",
+            "clickMessage": "Our story video is coming soon! In the meantime, explore our projects and services to see the impact we're creating.",
+            "buttonStyle": "outline",
+            "order": 2
+        },
+        {
+            "buttonId": "services_cta_primary",
+            "section": "services",
+            "label": "Schedule Consultation",
+            "isVisible": True,
+            "clickAction": "redirect",
+            "redirectUrl": "#contact",
+            "buttonStyle": "primary",
+            "order": 1
+        },
+        {
+            "buttonId": "services_cta_secondary",
+            "section": "services",
+            "label": "Contact Us Today",
+            "isVisible": True,
+            "clickAction": "redirect",
+            "redirectUrl": "#contact",
+            "buttonStyle": "outline",
+            "order": 2
+        },
+        {
+            "buttonId": "projects_cta_primary",
+            "section": "projects",
+            "label": "Propose a Project",
+            "isVisible": True,
+            "clickAction": "redirect",
+            "redirectUrl": "#contact",
+            "buttonStyle": "primary",
+            "order": 1
+        },
+        {
+            "buttonId": "projects_cta_secondary",
+            "section": "projects",
+            "label": "View All Projects",
+            "isVisible": True,
+            "clickAction": "show_message",
+            "clickMessage": "We're working on a dedicated projects gallery. Contact us to learn more about our current and upcoming initiatives!",
+            "buttonStyle": "outline",
+            "order": 2
+        }
+    ]
+    
     # Insert data
     await services_collection.insert_many(services_data)
     await projects_collection.insert_many(projects_data)
     await company_settings_collection.insert_many(settings_data)
+    await button_configs_collection.insert_many(button_configs_data)
     
-    print("Database seeded with initial data")
+    print("Database seeded with initial data including button configurations")
 
 async def close_database():
     """Close database connection"""
