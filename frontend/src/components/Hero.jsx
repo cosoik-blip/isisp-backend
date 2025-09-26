@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { ArrowRight, CheckCircle, Users, Target, Award, Globe } from 'lucide-react';
+import { DynamicButton } from './DynamicButton';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -79,23 +80,24 @@ export const Hero = () => {
               ))}
             </div>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons - Now Dynamic */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
+              <DynamicButton 
+                buttonId="hero_cta_primary"
+                fallbackText="Explore Our Impact"
                 size="lg" 
-                className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 px-8 py-4 text-lg"
+                className="px-8 py-4 text-lg"
               >
-                Explore Our Impact
                 <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
+              </DynamicButton>
               
-              <Button 
-                variant="outline" 
+              <DynamicButton 
+                buttonId="hero_cta_secondary"
+                fallbackText="Watch Our Story"
+                fallbackStyle="outline"
                 size="lg"
-                className="border-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-300 px-8 py-4 text-lg"
-              >
-                Watch Our Story
-              </Button>
+                className="px-8 py-4 text-lg"
+              />
             </div>
           </div>
 
