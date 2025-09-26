@@ -104,6 +104,35 @@ export const Footer = () => {
             </ul>
           </div>
 
+          {/* Company Documents */}
+          <div>
+            <h4 className="text-lg font-bold mb-6">Company Documents</h4>
+            <ul className="space-y-3">
+              <li>
+                <a 
+                  href="https://customer-assets.emergentagent.com/job_better-3ts-web/artifacts/hlyo8o6s_3TS_PROFILE_ENG.pdf" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group"
+                >
+                  <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  3TS Profile (PDF)
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://customer-assets.emergentagent.com/job_better-3ts-web/artifacts/twmue6l7_3TS_PIF_250106.docx" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group"
+                >
+                  <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  3TS PIF (DOC)
+                </a>
+              </li>
+            </ul>
+          </div>
+
           {/* Contact & Newsletter */}
           <div>
             <h4 className="text-lg font-bold mb-6">Stay Connected</h4>
