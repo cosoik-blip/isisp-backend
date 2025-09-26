@@ -7,6 +7,7 @@ import { Services } from "./components/Services";
 import { Projects } from "./components/Projects";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
+import { AdminDashboard } from "./components/admin/AdminDashboard";
 
 const Home = () => {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<Home />}>
             <Route index element={<Home />} />
           </Route>
+          <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
       </BrowserRouter>
     </div>
