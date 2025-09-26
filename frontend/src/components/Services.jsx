@@ -141,6 +141,36 @@ export const Services = () => {
               Let's discuss how our services can help you achieve your social impact goals 
               and create meaningful change in your community.
             </p>
+            
+            {/* Company Documents */}
+            <div className="mb-8">
+              <h4 className="text-lg font-semibold text-gray-800 mb-4">Learn More About Our Organization</h4>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+                <a
+                  href="https://customer-assets.emergentagent.com/job_better-3ts-web/artifacts/hlyo8o6s_3TS_PROFILE_ENG.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-6 py-3 bg-white border border-emerald-200 text-emerald-700 rounded-lg hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-300 shadow-md hover:shadow-lg"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd" />
+                  </svg>
+                  Download 3TS Profile
+                </a>
+                <a
+                  href="https://customer-assets.emergentagent.com/job_better-3ts-web/artifacts/twmue6l7_3TS_PIF_250106.docx"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-6 py-3 bg-white border border-emerald-200 text-emerald-700 rounded-lg hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-300 shadow-md hover:shadow-lg"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd" />
+                  </svg>
+                  Download 3TS PIF
+                </a>
+              </div>
+            </div>
+            
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
@@ -154,7 +184,7 @@ export const Services = () => {
                 size="lg" 
                 className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300"
               >
-                Download Service Guide
+                Contact Us Today
               </Button>
             </div>
           </div>
