@@ -7,6 +7,7 @@ from models import (
     CompanySetting, CompanySettingUpdate, CompanySettingCreate,
     ContactInquiry, ContactInquiryUpdate,
     ButtonConfig, ButtonConfigCreate, ButtonConfigUpdate,
+    NewsArticle, NewsArticleCreate, NewsArticleUpdate,
     APIResponse
 )
 from database import (
@@ -14,7 +15,8 @@ from database import (
     projects_collection, 
     company_settings_collection, 
     contact_inquiries_collection,
-    button_configs_collection
+    button_configs_collection,
+    news_collection
 )
 from datetime import datetime
 import logging
