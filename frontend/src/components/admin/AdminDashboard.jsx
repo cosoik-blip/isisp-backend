@@ -13,7 +13,8 @@ import {
   Edit,
   Plus,
   Trash2,
-  MousePointer
+  MousePointer,
+  Newspaper
 } from 'lucide-react';
 import { AdminLogin } from './AdminLogin';
 import { ServicesManager } from './ServicesManager';
@@ -21,6 +22,7 @@ import { ProjectsManager } from './ProjectsManager';
 import { SettingsManager } from './SettingsManager';
 import { InquiriesManager } from './InquiriesManager';
 import { ButtonsManager } from './ButtonsManager';
+import { NewsManager } from './NewsManager';
 
 export const AdminDashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
