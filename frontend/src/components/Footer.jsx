@@ -147,7 +147,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="https://customer-assets.emergentagent.com/job_better-3ts-web/artifacts/twmue6l7_3TS_PIF_250106.docx" 
+                  href="https://customer-assets.emergentagent.com/job_be84ca3b-7915-4def-83ac-2c90d340c0d9/artifacts/v2ghcjnw_3TS_PIF.pdf" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group"

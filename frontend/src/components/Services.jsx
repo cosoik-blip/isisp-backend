@@ -159,7 +159,7 @@ export const Services = () => {
                   Download 3TS Profile
                 </a>
                 <a
-                  href="https://customer-assets.emergentagent.com/job_better-3ts-web/artifacts/twmue6l7_3TS_PIF_250106.docx"
+                  href="https://customer-assets.emergentagent.com/job_be84ca3b-7915-4def-83ac-2c90d340c0d9/artifacts/v2ghcjnw_3TS_PIF.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-6 py-3 bg-white border border-emerald-200 text-emerald-700 rounded-lg hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-300 shadow-md hover:shadow-lg"
