@@ -113,11 +113,14 @@ export const DynamicButton = ({
       case 'redirect':
         if (buttonConfig.redirectUrl) {
           if (buttonConfig.redirectUrl.startsWith('#')) {
-            // Scroll to section
-            const element = document.querySelector(buttonConfig.redirectUrl);
+            // Handle hash navigation with optional query params
+            const [hash, queryString] = buttonConfig.redirectUrl.split('?');
+            const element = document.querySelector(hash);
             if (element) {
               element.scrollIntoView({ behavior: 'smooth' });
             }
+            // Update URL with full hash (including query params) to trigger hashchange
+            window.location.hash = buttonConfig.redirectUrl.substring(1);
           } else {
             // External redirect
             window.open(buttonConfig.redirectUrl, '_blank');
