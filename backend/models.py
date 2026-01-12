@@ -167,6 +167,38 @@ class ButtonConfigUpdate(BaseModel):
     buttonStyle: Optional[str] = None
     order: Optional[int] = None
 
+# News & Updates Models
+class NewsArticle(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    summary: str
+    content: str
+    category: str = "news"  # 'news', 'update', 'announcement', 'event'
+    image: Optional[str] = None
+    author: Optional[str] = None
+    isPublished: bool = True
+    publishedAt: datetime = Field(default_factory=datetime.utcnow)
+    createdAt: datetime = Field(default_factory=datetime.utcnow)
+    updatedAt: datetime = Field(default_factory=datetime.utcnow)
+
+class NewsArticleCreate(BaseModel):
+    title: str
+    summary: str
+    content: str
+    category: str = "news"
+    image: Optional[str] = None
+    author: Optional[str] = None
+    isPublished: bool = True
+
+class NewsArticleUpdate(BaseModel):
+    title: Optional[str] = None
+    summary: Optional[str] = None
+    content: Optional[str] = None
+    category: Optional[str] = None
+    image: Optional[str] = None
+    author: Optional[str] = None
+    isPublished: Optional[bool] = None
+
 # Response Models
 class APIResponse(BaseModel):
     success: bool
