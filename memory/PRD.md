@@ -31,6 +31,8 @@ Build a modern, professional website for "Three Thirds Society" (3ts.gr), a soci
 ## What's Been Implemented
 
 ### January 12, 2026
+- **Fixed deployment error**: Exception handlers were returning dicts instead of JSONResponse objects, causing `TypeError: 'dict' object is not callable`
+- **Added root-level `/health` endpoint** for Kubernetes health checks
 - **Removed "Made with Emergent" badge** from website footer
 - **Updated page title** to "Three Thirds Society | Social Economy & Innovation"
 - **Updated meta description** to be organization-relevant
