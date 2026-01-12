@@ -31,8 +31,10 @@ Build a modern, professional website for "Three Thirds Society" (3ts.gr), a soci
 ## What's Been Implemented
 
 ### January 12, 2026
-- **Fixed deployment error**: Exception handlers were returning dicts instead of JSONResponse objects, causing `TypeError: 'dict' object is not callable`
-- **Added root-level `/health` endpoint** for Kubernetes health checks
+- **Fixed MongoDB Atlas connection timeout**: Added proper connection settings (30s timeouts, retry logic, connection pooling) for MongoDB Atlas replica sets
+- **Made database initialization resilient**: App now starts even if initial DB connection is slow, with retry logic and non-blocking index creation
+- **Fixed deployment error**: Exception handlers now return `JSONResponse` objects instead of dicts
+- **Added root-level `/health` endpoint** for Kubernetes health probes
 - **Removed "Made with Emergent" badge** from website footer
 - **Updated page title** to "Three Thirds Society | Social Economy & Innovation"
 - **Updated meta description** to be organization-relevant
