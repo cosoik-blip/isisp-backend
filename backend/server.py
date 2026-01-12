@@ -65,6 +65,15 @@ async def health_check():
 async def root():
     return {"message": "Three Thirds Society API is running!"}
 
+# Health check endpoint (under /api for frontend access)
+@api_router.get("/health")
+async def api_health_check():
+    return {
+        "status": "healthy",
+        "service": "three-thirds-society-api",
+        "version": "1.0.0"
+    }
+
 # Include route modules
 app.include_router(services_router)
 app.include_router(projects_router)
