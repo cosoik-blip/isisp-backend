@@ -153,7 +153,7 @@ export const Footer = () => {
                   className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group"
                 >
                   <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  3TS PIF (DOC)
+                  3TS PIF (PDF)
                 </a>
               </li>
             </ul>
