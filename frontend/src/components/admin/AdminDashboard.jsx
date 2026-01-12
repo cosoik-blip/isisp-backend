@@ -180,6 +180,9 @@ export const AdminDashboard = () => {
             {activeSection === 'projects' && (
               <ProjectsManager authToken={authToken} />
             )}
+            {activeSection === 'news' && (
+              <NewsManager credentials={{ username: 'admin', password: '254TFD98' }} />
+            )}
             {activeSection === 'buttons' && (
               <ButtonsManager authToken={authToken} />
             )}
