@@ -133,7 +133,7 @@ export const Hero = () => {
                 <span className="font-semibold text-gray-900">Trusted by Leading Organizations</span>
               </div>
               <div className="text-sm text-gray-600 space-y-1">
-                <div>• European Commission Partners</div>
+                <div>• Partner in large European Networks</div>
                 <div>• Greek Ministry of Development Collaboration</div>
                 <div>• Regional Development Agencies</div>
                 <div>• 100+ NGOs and Social Enterprises</div>
