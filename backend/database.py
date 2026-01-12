@@ -35,6 +35,7 @@ contact_inquiries_collection = db.contact_inquiries
 company_settings_collection = db.company_settings
 team_members_collection = db.team_members
 button_configs_collection = db.button_configs
+news_collection = db.news
 
 async def init_database():
     """Initialize database with indexes and default data"""
