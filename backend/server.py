@@ -32,9 +32,14 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting up Three Thirds Society API...")
-    await init_database()
-    await seed_initial_data()
-    logger.info("Database initialized and seeded")
+    try:
+        await init_database()
+        await seed_initial_data()
+        logger.info("Database initialized and seeded")
+    except Exception as e:
+        logger.error(f"Database initialization error (non-fatal): {str(e)}")
+        # Don't fail startup - app can still serve health checks
+        # Database operations will retry on first request
     yield
     # Shutdown
     logger.info("Shutting down...")
