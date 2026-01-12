@@ -51,19 +51,19 @@ app = FastAPI(
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
-# Legacy hello world endpoint
-@api_router.get("/")
-async def root():
-    return {"message": "Three Thirds Society API is running!"}
-
-# Health check endpoint
-@api_router.get("/health")
+# Health check endpoint (at root level for Kubernetes)
+@app.get("/health")
 async def health_check():
     return {
         "status": "healthy",
         "service": "three-thirds-society-api",
         "version": "1.0.0"
     }
+
+# Legacy hello world endpoint
+@api_router.get("/")
+async def root():
+    return {"message": "Three Thirds Society API is running!"}
 
 # Include route modules
 app.include_router(services_router)
