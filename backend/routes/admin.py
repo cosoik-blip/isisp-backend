@@ -442,3 +442,89 @@ async def delete_button_admin(button_id: str, admin_user: str = Depends(authenti
     except Exception as e:
         logger.error(f"Error deleting button {button_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to delete button")
+
+
+# News Management
+@router.get("/news", response_model=List[NewsArticle])
+async def get_all_news_admin(admin_user: str = Depends(authenticate_admin)):
+    """Get all news articles including unpublished ones"""
+    try:
+        cursor = news_collection.find().sort("publishedAt", -1)
+        articles = await cursor.to_list(length=100)
+        
+        for article in articles:
+            if "_id" in article:
+                del article["_id"]
+        
+        return articles
+        
+    except Exception as e:
+        logger.error(f"Error retrieving admin news: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve news")
+
+@router.post("/news", response_model=APIResponse)
+async def create_news_admin(article: NewsArticleCreate, admin_user: str = Depends(authenticate_admin)):
+    """Create a new news article"""
+    try:
+        article_obj = NewsArticle(**article.dict())
+        result = await news_collection.insert_one(article_obj.dict())
+        
+        if result.inserted_id:
+            logger.info(f"Admin {admin_user} created news: {article_obj.title}")
+            return APIResponse(
+                success=True,
+                message="News article created successfully",
+                data={"id": article_obj.id}
+            )
+        else:
+            raise HTTPException(status_code=500, detail="Failed to create article")
+            
+    except Exception as e:
+        logger.error(f"Error creating news: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to create article")
+
+@router.put("/news/{article_id}", response_model=APIResponse)
+async def update_news_admin(article_id: str, article_update: NewsArticleUpdate, admin_user: str = Depends(authenticate_admin)):
+    """Update a news article"""
+    try:
+        update_data = {k: v for k, v in article_update.dict().items() if v is not None}
+        
+        if not update_data:
+            raise HTTPException(status_code=400, detail="No valid fields to update")
+        
+        update_data["updatedAt"] = datetime.utcnow()
+        
+        result = await news_collection.update_one(
+            {"id": article_id},
+            {"$set": update_data}
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Article not found")
+        
+        logger.info(f"Admin {admin_user} updated news {article_id}")
+        return APIResponse(success=True, message="Article updated successfully")
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating news {article_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to update article")
+
+@router.delete("/news/{article_id}", response_model=APIResponse)
+async def delete_news_admin(article_id: str, admin_user: str = Depends(authenticate_admin)):
+    """Delete a news article"""
+    try:
+        result = await news_collection.delete_one({"id": article_id})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Article not found")
+        
+        logger.info(f"Admin {admin_user} deleted news {article_id}")
+        return APIResponse(success=True, message="Article deleted successfully")
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting news {article_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to delete article")
