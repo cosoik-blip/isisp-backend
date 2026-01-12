@@ -102,15 +102,11 @@ export const Header = () => {
                   </a>
                 ))}
                 <div className="pt-4 space-y-2">
-                  <Button 
-                    variant="outline" 
-                    className="w-full border-emerald-200 text-emerald-700 hover:bg-emerald-50"
-                  >
-                    Get Started
-                  </Button>
-                  <Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
-                    Join Our Mission
-                  </Button>
+                  <a href="#contact" onClick={() => setIsMenuOpen(false)}>
+                    <Button className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
+                      Join Our Mission
+                    </Button>
+                  </a>
                 </div>
               </nav>
             </div>
