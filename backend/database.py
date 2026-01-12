@@ -66,6 +66,10 @@ async def init_database():
             await button_configs_collection.create_index("buttonId", unique=True, background=True)
             await button_configs_collection.create_index("section", background=True)
             
+            await news_collection.create_index("publishedAt", background=True)
+            await news_collection.create_index("isPublished", background=True)
+            await news_collection.create_index("category", background=True)
+            
             print("Database initialized with indexes")
             logger.info("Database initialized with indexes")
             return
