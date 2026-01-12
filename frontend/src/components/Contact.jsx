@@ -236,7 +236,7 @@ export const Contact = () => {
 
           {/* Contact Form */}
           <div className="lg:col-span-2">
-            <Card className="shadow-2xl border-0">
+            <Card id="contact-form" className="shadow-2xl border-0">
               <CardHeader>
                 <CardTitle className="text-2xl font-bold text-gray-900">
                   Send us a Message
