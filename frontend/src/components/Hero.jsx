@@ -134,7 +134,7 @@ export const Hero = () => {
               </div>
               <div className="text-sm text-gray-600 space-y-1">
                 <div>• Partner in large European Networks</div>
-                <div>• Greek Ministry of Development Collaboration</div>
+                <div>• Regions & Municipalities</div>
                 <div>• Regional Development Agencies</div>
                 <div>• 100+ NGOs and Social Enterprises</div>
               </div>
