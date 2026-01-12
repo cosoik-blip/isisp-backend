@@ -123,9 +123,8 @@ export const Services = () => {
                     buttonId={`service_learn_more_${service.id}`}
                     fallbackText="Learn More"
                     fallbackStyle="outline"
-                    className="w-full justify-between"
+                    className="w-full justify-between group"
                   >
-                    Learn More
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                   </DynamicButton>
                 </CardContent>
