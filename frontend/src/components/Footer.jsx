@@ -42,7 +42,7 @@ export const Footer = () => {
             <div className="flex space-x-4">
               {[
                 { icon: Linkedin, href: "#", color: 'hover:text-blue-400' },
-                { icon: Facebook, href: "#", color: 'hover:text-blue-500' },
+                { icon: Facebook, href: "https://www.facebook.com/ThreeThirdsSociety/", color: 'hover:text-blue-500' },
                 { icon: Twitter, href: "#", color: 'hover:text-sky-400' },
                 { icon: Instagram, href: "#", color: 'hover:text-pink-400' }
               ].map((social, index) => (
