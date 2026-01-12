@@ -84,20 +84,34 @@ export const Footer = () => {
             <h4 className="text-lg font-bold mb-6">Quick Links</h4>
             <ul className="space-y-3">
               {[
-                { label: 'About Us', href: '#' },
+                { label: 'About Us', href: '#home' },
                 { label: 'Our Services', href: '#services' },
                 { label: 'Projects', href: '#projects' },
-                { label: 'Training Programs', href: '#training' },
-                { label: 'Resources', href: '#resources' },
-                { label: 'News & Updates', href: '#' },
-                { label: 'Careers', href: '#' }
+                { label: 'News & Updates', href: '#news' },
+                { label: 'Careers', href: '#careers', action: 'careers' }
               ].map((link, index) => (
                 <li key={index}>
-                  <a 
-                    href={link.href} 
-                    className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group"
-                  >
-                    <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  {link.action === 'careers' ? (
+                    <button 
+                      onClick={() => setShowCareersModal(true)}
+                      className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group"
+                    >
+                      <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      {link.label}
+                    </button>
+                  ) : (
+                    <a 
+                      href={link.href} 
+                      className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group"
+                    >
+                      <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      {link.label}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
                     {link.label}
                   </a>
                 </li>
