@@ -87,19 +87,25 @@ app.add_middleware(
 
 # Error handling middleware
 @app.exception_handler(500)
-async def internal_server_error_handler(request, exc):
+async def internal_server_error_handler(request: Request, exc: Exception):
     logger.error(f"Internal server error: {str(exc)}")
-    return {
-        "error": "Internal server error",
-        "message": "Something went wrong. Please try again later."
-    }
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": "Internal server error",
+            "message": "Something went wrong. Please try again later."
+        }
+    )
 
 @app.exception_handler(404)
-async def not_found_handler(request, exc):
-    return {
-        "error": "Not found",
-        "message": "The requested resource was not found."
-    }
+async def not_found_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=404,
+        content={
+            "error": "Not found",
+            "message": "The requested resource was not found."
+        }
+    )
 
 if __name__ == "__main__":
     import uvicorn
