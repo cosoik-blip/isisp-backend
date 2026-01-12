@@ -9,6 +9,7 @@ export const Header = () => {
     { label: 'Home', href: '#home' },
     { label: 'Services', href: '#services' },
     { label: 'Projects', href: '#projects' },
+    { label: 'News & Updates', href: '#news' },
     { label: 'Contact', href: '#contact' }
   ];
 
