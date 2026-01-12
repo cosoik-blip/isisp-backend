@@ -78,6 +78,27 @@ export const Contact = () => {
 
   useEffect(() => {
     fetchContactInfo();
+    
+    // Check for URL parameters to pre-fill form
+    const checkUrlParams = () => {
+      const hash = window.location.hash;
+      if (hash.includes('contact')) {
+        const params = new URLSearchParams(hash.split('?')[1] || '');
+        const action = params.get('action');
+        
+        if (action === 'consultation') {
+          handleQuickAction('consultation');
+        } else if (action === 'partnership') {
+          handleQuickAction('partnership');
+        }
+      }
+    };
+    
+    // Check on mount and on hash change
+    checkUrlParams();
+    window.addEventListener('hashchange', checkUrlParams);
+    
+    return () => window.removeEventListener('hashchange', checkUrlParams);
   }, []);
 
   const fetchContactInfo = async () => {
