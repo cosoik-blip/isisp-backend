@@ -204,7 +204,7 @@ export const teamData = [
 ];
 
 export const contactData = {
-  address: "Pellis 2, Nea Filadelfia, Marousi, Attiki, Greece",
+  address: "Pellis 2, Nea Filadelfia, Attiki, Greece",
   phone: "+30 211 7057627",
   email: "info@3ts.gr",
   workingHours: "Monday - Friday: 9:00 AM - 6:00 PM",

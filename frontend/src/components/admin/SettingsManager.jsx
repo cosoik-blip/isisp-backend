@@ -184,7 +184,7 @@ const HeroStatsSettings = ({ settings, onSave, saving }) => {
 
 const ContactInfoSettings = ({ settings, onSave, saving }) => {
   const [contactInfo, setContactInfo] = useState({
-    address: settings?.address || 'Pellis 2, Nea Filadelfia, Marousi, Attiki, Greece',
+    address: settings?.address || 'Pellis 2, Nea Filadelfia, Attiki, Greece',
     phone: settings?.phone || '+30 211 7057627',
     email: settings?.email || 'info@3ts.gr',
     workingHours: settings?.workingHours || 'Monday - Friday: 9:00 AM - 6:00 PM'
