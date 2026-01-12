@@ -71,15 +71,11 @@ export const Header = () => {
 
             {/* CTA Button */}
             <div className="hidden lg:flex items-center space-x-4">
-              <Button 
-                variant="outline" 
-                className="border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 transition-all duration-300"
-              >
-                Get Started
-              </Button>
-              <Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                Join Our Mission
-              </Button>
+              <a href="#contact">
+                <Button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                  Join Our Mission
+                </Button>
+              </a>
             </div>
 
             {/* Mobile Menu Button */}
