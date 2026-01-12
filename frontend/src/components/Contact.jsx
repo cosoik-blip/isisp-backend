@@ -13,10 +13,6 @@ import {
   MessageSquare, 
   Users, 
   Building,
-  Facebook,
-  Linkedin,
-  Twitter,
-  Instagram,
   CheckCircle,
   AlertCircle
 } from 'lucide-react';
