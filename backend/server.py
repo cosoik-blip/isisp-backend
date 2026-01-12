@@ -17,6 +17,7 @@ from routes.contact import router as contact_router
 from routes.settings import router as settings_router
 from routes.admin import router as admin_router
 from routes.buttons import router as buttons_router
+from routes.news import router as news_router
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
