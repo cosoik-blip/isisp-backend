@@ -48,8 +48,6 @@ export const DynamicButton = ({
       case 'show_message':
         if (buttonConfig.clickMessage) {
           setShowMessage(true);
-          // Auto-hide message after 5 seconds
-          setTimeout(() => setShowMessage(false), 5000);
         }
         break;
       
