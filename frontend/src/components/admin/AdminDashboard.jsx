@@ -82,6 +82,7 @@ export const AdminDashboard = () => {
     { id: 'overview', label: 'Overview', icon: BarChart3 },
     { id: 'services', label: 'Services', icon: Briefcase },
     { id: 'projects', label: 'Projects', icon: Eye },
+    { id: 'news', label: 'News & Updates', icon: Newspaper },
     { id: 'buttons', label: 'Buttons', icon: MousePointer },
     { id: 'settings', label: 'Settings', icon: Settings },
     { id: 'inquiries', label: 'Inquiries', icon: MessageSquare },
