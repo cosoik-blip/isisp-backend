@@ -109,8 +109,8 @@ export const DynamicButton = ({
     }
   };
 
-  // Determine what text to show - prioritize buttonConfig.label, then children, then fallback
-  const displayText = buttonConfig?.label || fallbackText;
+  // Determine what text to show - prioritize buttonConfig.label (unless it's the default "Button"), then fallback
+  const displayText = (buttonConfig?.label && buttonConfig.label !== "Button") ? buttonConfig.label : fallbackText;
   
   return (
     <div className="relative inline-block">
