@@ -39,23 +39,43 @@ export const Footer = () => {
               Empowering communities and creating lasting social impact through innovative solutions, 
               comprehensive training, and sustainable development programs across Greece.
             </p>
-            <div className="flex space-x-4">
-              {[
-                { icon: Linkedin, href: "#", color: 'hover:text-blue-400' },
-                { icon: Facebook, href: "https://www.facebook.com/ThreeThirdsSociety/", color: 'hover:text-blue-500' },
-                { icon: Twitter, href: "#", color: 'hover:text-sky-400' },
-                { icon: Instagram, href: "#", color: 'hover:text-pink-400' }
-              ].map((social, index) => (
-                <a
-                  key={index}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 transition-all duration-300 ${social.color} hover:scale-110`}
-                >
-                  <social.icon className="w-5 h-5" />
-                </a>
-              ))}
+            <div className="flex space-x-4" data-testid="social-links-container">
+              <a 
+                href="https://www.linkedin.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 transition-all duration-300 hover:text-blue-400 hover:scale-110"
+                data-testid="social-linkedin"
+              >
+                <Linkedin className="w-5 h-5" />
+              </a>
+              <a 
+                href="https://www.facebook.com/ThreeThirdsSociety/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 transition-all duration-300 hover:text-blue-500 hover:scale-110"
+                data-testid="social-facebook"
+              >
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a 
+                href="https://www.twitter.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 transition-all duration-300 hover:text-sky-400 hover:scale-110"
+                data-testid="social-twitter"
+              >
+                <Twitter className="w-5 h-5" />
+              </a>
+              <a 
+                href="https://www.instagram.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 transition-all duration-300 hover:text-pink-400 hover:scale-110"
+                data-testid="social-instagram"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
             </div>
           </div>
 
