@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { 
   Mail, 
@@ -9,11 +9,16 @@ import {
   Twitter, 
   Instagram,
   ArrowRight,
-  Heart
+  Heart,
+  X,
+  Briefcase,
+  Users,
+  GraduationCap
 } from 'lucide-react';
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [showCareersModal, setShowCareersModal] = useState(false);
 
   return (
     <footer className="bg-gray-900 text-white">
@@ -83,39 +88,39 @@ export const Footer = () => {
           <div>
             <h4 className="text-lg font-bold mb-6">Quick Links</h4>
             <ul className="space-y-3">
-              {[
-                { label: 'About Us', href: '#home' },
-                { label: 'Our Services', href: '#services' },
-                { label: 'Projects', href: '#projects' },
-                { label: 'News & Updates', href: '#news' },
-                { label: 'Careers', href: '#careers', action: 'careers' }
-              ].map((link, index) => (
-                <li key={index}>
-                  {link.action === 'careers' ? (
-                    <button 
-                      onClick={() => setShowCareersModal(true)}
-                      className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group"
-                    >
-                      <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      {link.label}
-                    </button>
-                  ) : (
-                    <a 
-                      href={link.href} 
-                      className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group"
-                    >
-                      <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      {link.label}
-                    </a>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-                    {link.label}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <a href="#home" className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group">
+                  <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a href="#services" className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group">
+                  <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Our Services
+                </a>
+              </li>
+              <li>
+                <a href="#projects" className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group">
+                  <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Projects
+                </a>
+              </li>
+              <li>
+                <a href="#news" className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group">
+                  <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  News & Updates
+                </a>
+              </li>
+              <li>
+                <button 
+                  onClick={() => setShowCareersModal(true)}
+                  className="text-gray-300 hover:text-emerald-400 transition-colors duration-300 flex items-center group"
+                >
+                  <ArrowRight className="w-4 h-4 mr-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  Careers
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -144,10 +149,10 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Company Documents */}
+          {/* Company Documents & Contact */}
           <div>
             <h4 className="text-lg font-bold mb-6">Company Documents</h4>
-            <ul className="space-y-3">
+            <ul className="space-y-3 mb-6">
               <li>
                 <a 
                   href="https://customer-assets.emergentagent.com/job_better-3ts-web/artifacts/hlyo8o6s_3TS_PROFILE_ENG.pdf" 
@@ -171,14 +176,10 @@ export const Footer = () => {
                 </a>
               </li>
             </ul>
-          </div>
-
-          {/* Contact & Newsletter */}
-          <div>
-            <h4 className="text-lg font-bold mb-6">Stay Connected</h4>
             
             {/* Contact Info */}
-            <div className="space-y-3 mb-6">
+            <h4 className="text-lg font-bold mb-4">Contact</h4>
+            <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 text-emerald-500" />
                 <span className="text-gray-300 text-sm">Pellis 2, Nea Filadelfia, Marousi, Attiki</span>
@@ -190,27 +191,6 @@ export const Footer = () => {
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-emerald-500" />
                 <span className="text-gray-300 text-sm">info@3ts.gr</span>
-              </div>
-            </div>
-
-            {/* Newsletter */}
-            <div>
-              <h5 className="font-semibold mb-3">Newsletter</h5>
-              <p className="text-gray-300 text-sm mb-4">
-                Get updates on our latest projects and training programs.
-              </p>
-              <div className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-emerald-500 text-sm"
-                />
-                <Button 
-                  size="sm"
-                  className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 shadow-lg"
-                >
-                  Subscribe
-                </Button>
               </div>
             </div>
           </div>
@@ -245,6 +225,104 @@ export const Footer = () => {
           </div>
         </div>
       </div>
+
+      {/* Careers Modal */}
+      {showCareersModal && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          onClick={() => setShowCareersModal(false)}
+        >
+          <div 
+            className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 text-white">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Briefcase className="w-8 h-8" />
+                  <div>
+                    <h2 className="text-2xl font-bold">Careers at 3TS</h2>
+                    <p className="text-emerald-100">Join our mission to create social impact</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowCareersModal(false)}
+                  className="text-white/80 hover:text-white p-1"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6 overflow-y-auto max-h-[60vh]">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Why Work With Us?</h3>
+                  <p className="text-gray-600">
+                    At Three Thirds Society, we believe in empowering not just communities, but also our team members. 
+                    Join us in making a real difference in the social economy sector across Greece and Europe.
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="bg-emerald-50 rounded-lg p-4 text-center">
+                    <Users className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
+                    <h4 className="font-semibold text-gray-900">Collaborative Team</h4>
+                    <p className="text-sm text-gray-600">Work with passionate professionals</p>
+                  </div>
+                  <div className="bg-emerald-50 rounded-lg p-4 text-center">
+                    <GraduationCap className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
+                    <h4 className="font-semibold text-gray-900">Growth Opportunities</h4>
+                    <p className="text-sm text-gray-600">Continuous learning & development</p>
+                  </div>
+                  <div className="bg-emerald-50 rounded-lg p-4 text-center">
+                    <Heart className="w-8 h-8 text-emerald-600 mx-auto mb-2" />
+                    <h4 className="font-semibold text-gray-900">Meaningful Work</h4>
+                    <p className="text-sm text-gray-600">Create real social impact</p>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Current Openings</h3>
+                  <p className="text-gray-600 mb-4">
+                    We're always looking for talented individuals who share our passion for social change. 
+                    While we may not have specific positions listed at the moment, we welcome spontaneous applications.
+                  </p>
+                  <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <p className="text-gray-700">
+                      <strong>Interested in joining our team?</strong><br />
+                      Send your CV and a cover letter explaining your interest in social economy to:
+                    </p>
+                    <a 
+                      href="mailto:info@3ts.gr?subject=Career Inquiry" 
+                      className="inline-flex items-center mt-2 text-emerald-600 hover:text-emerald-700 font-medium"
+                    >
+                      <Mail className="w-4 h-4 mr-2" />
+                      info@3ts.gr
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-4 border-t bg-gray-50 flex justify-between items-center">
+              <a 
+                href="#contact" 
+                onClick={() => setShowCareersModal(false)}
+                className="text-emerald-600 hover:text-emerald-700 font-medium"
+              >
+                Contact Us
+              </a>
+              <Button
+                onClick={() => setShowCareersModal(false)}
+                className="bg-emerald-500 hover:bg-emerald-600"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </footer>
   );
 };
