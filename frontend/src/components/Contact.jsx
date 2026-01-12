@@ -43,6 +43,39 @@ export const Contact = () => {
     error: null
   });
 
+  const handleQuickAction = (actionType) => {
+    const subjects = {
+      consultation: 'Schedule a Consultation',
+      partnership: 'Partnership Inquiry'
+    };
+    
+    const messages = {
+      consultation: 'Hello,\n\nI would like to schedule a consultation to discuss potential collaboration opportunities.\n\nPlease let me know your available times.\n\nThank you.',
+      partnership: 'Hello,\n\nI am interested in exploring partnership opportunities with Three Thirds Society.\n\nI would appreciate the opportunity to discuss how we might work together.\n\nThank you.'
+    };
+    
+    setFormData(prev => ({
+      ...prev,
+      subject: subjects[actionType],
+      message: messages[actionType]
+    }));
+    
+    // Reset form state if previously submitted
+    setFormState({
+      isSubmitting: false,
+      isSubmitted: false,
+      error: null
+    });
+    
+    // Scroll to the form
+    setTimeout(() => {
+      const formElement = document.getElementById('contact-form');
+      if (formElement) {
+        formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+  };
+
   useEffect(() => {
     fetchContactInfo();
   }, []);
