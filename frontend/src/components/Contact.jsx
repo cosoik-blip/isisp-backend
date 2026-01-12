@@ -217,6 +217,7 @@ export const Contact = () => {
               <Button 
                 variant="outline" 
                 className="w-full justify-start border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300"
+                onClick={() => handleQuickAction('consultation')}
               >
                 <Users className="w-4 h-4 mr-3" />
                 Schedule a Consultation
@@ -225,6 +226,7 @@ export const Contact = () => {
               <Button 
                 variant="outline" 
                 className="w-full justify-start border-emerald-200 text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300"
+                onClick={() => handleQuickAction('partnership')}
               >
                 <Building className="w-4 h-4 mr-3" />
                 Partnership Inquiry
