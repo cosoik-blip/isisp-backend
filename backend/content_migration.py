@@ -1,12 +1,81 @@
 """
 Custom content migration for Three Thirds Society website.
-This ensures all button configurations and content are present in the database.
+This ensures all button configurations, services, and content are present in the database.
 """
 
 from database import button_configs_collection, company_settings_collection, services_collection
+from datetime import datetime
 import logging
+import uuid
 
 logger = logging.getLogger(__name__)
+
+# Services data - ensure all services exist
+SERVICES_DATA = [
+    {
+        "id": "1",
+        "title": "Social Enterprise Development",
+        "description": "Comprehensive support for creating and scaling social enterprises that address community needs while generating sustainable income.",
+        "icon": "Building2",
+        "features": ["Business Plan Development", "Market Analysis", "Funding Support", "Mentorship Programs"],
+        "isActive": True,
+        "order": 1
+    },
+    {
+        "id": "2",
+        "title": "Training & Capacity Building",
+        "description": "Professional workshops and training programs designed to empower vulnerable groups with essential skills and knowledge.",
+        "icon": "GraduationCap",
+        "features": ["Skills Development", "Leadership Training", "Digital Literacy", "Entrepreneurship Education"],
+        "isActive": True,
+        "order": 2
+    },
+    {
+        "id": "3",
+        "title": "Research & Innovation",
+        "description": "Cutting-edge research and innovative solutions to tackle social challenges and promote inclusive economic growth.",
+        "icon": "Lightbulb",
+        "features": ["Social Impact Research", "Policy Development", "Innovation Labs", "Data Analytics"],
+        "isActive": True,
+        "order": 3
+    },
+    {
+        "id": "4",
+        "title": "Project Management",
+        "description": "End-to-end project planning, implementation, and evaluation services for social impact initiatives and EU-funded programs.",
+        "icon": "Settings",
+        "features": ["EU Project Management", "Impact Assessment", "Strategic Planning", "Quality Assurance"],
+        "isActive": True,
+        "order": 4
+    },
+    {
+        "id": "5",
+        "title": "Advisory Services",
+        "description": "Expert consultation and strategic guidance for organizations seeking to maximize their social impact and operational efficiency.",
+        "icon": "Users",
+        "features": ["Organizational Development", "Strategic Consulting", "Impact Measurement", "Sustainability Planning"],
+        "isActive": True,
+        "order": 5
+    },
+    {
+        "id": "6",
+        "title": "Networking & Partnerships",
+        "description": "Building bridges between stakeholders to create collaborative ecosystems that amplify social impact across communities.",
+        "icon": "Network",
+        "features": ["Stakeholder Engagement", "Partnership Development", "Community Building", "Knowledge Exchange"],
+        "isActive": True,
+        "order": 6
+    },
+    {
+        "id": str(uuid.uuid4()),
+        "title": "Social Economy Workshops & Conferences",
+        "description": "THREE THIRDS SOCIETY designs and organizes Social Economy workshops and conferences that empower civil society actors, support policy dialogue, and strengthen regional development. Through participatory formats and multi-stakeholder engagement, our events foster knowledge exchange, capacity building, and collaborative solutions for inclusive and sustainable local economies.",
+        "icon": "Calendar",
+        "features": ["Interactive Workshops", "Thematic Panels", "Peer Learning", "Policy Dialogues"],
+        "isActive": True,
+        "order": 0
+    }
+]
 
 CUSTOM_BUTTON_CONFIGS = [
     {
