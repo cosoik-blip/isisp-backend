@@ -37,7 +37,8 @@ async def lifespan(app: FastAPI):
     try:
         await init_database()
         await seed_initial_data()
-        logger.info("Database initialized and seeded")
+        await migrate_custom_content()
+        logger.info("Database initialized, seeded, and custom content migrated")
     except Exception as e:
         logger.error(f"Database initialization error (non-fatal): {str(e)}")
         # Don't fail startup - app can still serve health checks
