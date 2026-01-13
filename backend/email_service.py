@@ -3,6 +3,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
 import logging
+import ssl
 
 logger = logging.getLogger(__name__)
 
@@ -98,6 +99,11 @@ This email was sent from the Three Thirds Society website contact form.
         msg.attach(MIMEText(text_content, 'plain'))
         msg.attach(MIMEText(html_content, 'html'))
         
+        # Create SSL context that doesn't verify hostname (for servers with mismatched certs)
+        tls_context = ssl.create_default_context()
+        tls_context.check_hostname = False
+        tls_context.verify_mode = ssl.CERT_NONE
+        
         # Send email
         await aiosmtplib.send(
             msg,
@@ -105,7 +111,8 @@ This email was sent from the Three Thirds Society website contact form.
             port=SMTP_PORT,
             username=SMTP_EMAIL,
             password=SMTP_PASSWORD,
-            start_tls=True
+            start_tls=True,
+            tls_context=tls_context
         )
         
         logger.info(f"Contact email sent successfully from {email}")
