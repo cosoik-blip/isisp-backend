@@ -460,6 +460,27 @@ async def migrate_custom_content():
                     await services_collection.insert_one(service_data)
                     logger.info(f"Inserted missing service: {service_data['title']}")
         
+        # SECOND: Ensure projects exist
+        projects_count = await projects_collection.count_documents({})
+        logger.info(f"Found {projects_count} existing projects")
+        
+        if projects_count == 0:
+            logger.info("No projects found, inserting all projects...")
+            for project_data in PROJECTS_DATA:
+                project_data["createdAt"] = datetime.utcnow()
+                project_data["updatedAt"] = datetime.utcnow()
+                await projects_collection.insert_one(project_data)
+                logger.info(f"Inserted project: {project_data['title']}")
+        else:
+            # Insert missing projects
+            for project_data in PROJECTS_DATA:
+                existing = await projects_collection.find_one({"title": project_data["title"]})
+                if not existing:
+                    project_data["createdAt"] = datetime.utcnow()
+                    project_data["updatedAt"] = datetime.utcnow()
+                    await projects_collection.insert_one(project_data)
+                    logger.info(f"Inserted missing project: {project_data['title']}")
+        
         # Migrate button configurations
         for btn_config in CUSTOM_BUTTON_CONFIGS:
             existing = await button_configs_collection.find_one({"buttonId": btn_config["buttonId"]})
