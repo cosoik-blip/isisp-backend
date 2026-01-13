@@ -1,69 +1,33 @@
 """
 Custom content migration for Three Thirds Society website.
-This ensures all button configurations, services, and content are present in the database.
+This ensures all data from the dashboard is present in production.
+IMPORTANT: This file contains the EXACT data from the dashboard as of migration date.
 """
 
-from database import button_configs_collection, company_settings_collection, services_collection, projects_collection
+from database import (
+    button_configs_collection, 
+    company_settings_collection, 
+    services_collection, 
+    projects_collection
+)
 from datetime import datetime
 import logging
-import uuid
 
 logger = logging.getLogger(__name__)
 
-# Projects data - ensure all projects exist
-PROJECTS_DATA = [
-    {
-        "id": "1",
-        "title": "Epirus Social Hub",
-        "description": "A comprehensive initiative to stimulate and support social enterprises in the Epirus region, fostering economic and social recovery.",
-        "impact": "25+ social enterprises launched",
-        "region": "Epirus",
-        "year": "2023-2024",
-        "category": "Regional Development",
-        "image": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=600&fit=crop",
-        "isActive": True,
-        "order": 1
-    },
-    {
-        "id": "2",
-        "title": "Digital Convergence Initiative",
-        "description": "Bridging the digital divide by providing technology access and digital literacy training to vulnerable communities.",
-        "impact": "1,200+ people trained in digital skills",
-        "region": "Attica",
-        "year": "2023",
-        "category": "Digital Inclusion",
-        "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop",
-        "isActive": True,
-        "order": 2
-    },
-    {
-        "id": "3",
-        "title": "Women's Economic Empowerment",
-        "description": "Supporting women's organizations and female entrepreneurs through targeted training and funding opportunities.",
-        "impact": "150+ women entrepreneurs supported",
-        "region": "Peloponnese",
-        "year": "2022-2023",
-        "category": "Gender Equality",
-        "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=600&fit=crop",
-        "isActive": True,
-        "order": 3
-    },
-    {
-        "id": "4",
-        "title": "Youth Social Innovation Lab",
-        "description": "Empowering young people to develop innovative solutions for social challenges in their communities.",
-        "impact": "50+ youth-led projects launched",
-        "region": "Thessaly",
-        "year": "2023",
-        "category": "Youth Development",
-        "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
-        "isActive": True,
-        "order": 4
-    }
-]
-
-# Services data - ensure all services exist
+# ============================================================================
+# SERVICES - Exact data from dashboard
+# ============================================================================
 SERVICES_DATA = [
+    {
+        "id": "85fceec4-ee13-45b1-90b3-b2a5a306dcf4",
+        "title": "Social Economy Workshops & Conferences",
+        "description": "THREE THIRDS SOCIETY designs and organizes Social Economy workshops and conferences that empower civil society actors, support policy dialogue, and strengthen regional development. Through participatory formats and multi-stakeholder engagement, our events foster knowledge exchange, capacity building, and collaborative solutions for inclusive and sustainable local economies.",
+        "icon": "Network",
+        "features": [],
+        "isActive": True,
+        "order": 0
+    },
     {
         "id": "1",
         "title": "Social Enterprise Development",
@@ -117,19 +81,105 @@ SERVICES_DATA = [
         "features": ["Stakeholder Engagement", "Partnership Development", "Community Building", "Knowledge Exchange"],
         "isActive": True,
         "order": 6
-    },
-    {
-        "id": str(uuid.uuid4()),
-        "title": "Social Economy Workshops & Conferences",
-        "description": "THREE THIRDS SOCIETY designs and organizes Social Economy workshops and conferences that empower civil society actors, support policy dialogue, and strengthen regional development. Through participatory formats and multi-stakeholder engagement, our events foster knowledge exchange, capacity building, and collaborative solutions for inclusive and sustainable local economies.",
-        "icon": "Calendar",
-        "features": ["Interactive Workshops", "Thematic Panels", "Peer Learning", "Policy Dialogues"],
-        "isActive": True,
-        "order": 0
     }
 ]
 
-CUSTOM_BUTTON_CONFIGS = [
+# ============================================================================
+# PROJECTS - Exact data from dashboard
+# ============================================================================
+PROJECTS_DATA = [
+    {
+        "id": "1",
+        "title": "Epirus Social Hub",
+        "description": "A comprehensive initiative to stimulate and support social enterprises in the Epirus region, fostering economic and social recovery.",
+        "impact": "25+ social enterprises and CSOs supported",
+        "region": "Epirus",
+        "year": "2023-2024",
+        "category": "Regional Development",
+        "image": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=600&fit=crop",
+        "isActive": True,
+        "order": 1
+    },
+    {
+        "id": "2",
+        "title": "Digital Convergence Initiative",
+        "description": "Bridging the digital divide by providing technology access and digital literacy training to vulnerable communities.",
+        "impact": "1,200+ people trained in digital skills",
+        "region": "Attica",
+        "year": "2023",
+        "category": "Digital Inclusion",
+        "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop",
+        "isActive": True,
+        "order": 2
+    },
+    {
+        "id": "wg-hub-3",
+        "title": "Western Greece Social Hub",
+        "description": "Advisory support and cooperation between formal and informal sectors of social economy in the region of Western Greece",
+        "impact": "50+ CSOs and Socail Enterprises supported",
+        "region": "Western Greece",
+        "year": "2022-2024",
+        "category": "Regional Development",
+        "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=600&fit=crop",
+        "isActive": True,
+        "order": 3
+    },
+    {
+        "id": "4",
+        "title": "Youth Social Innovation Lab",
+        "description": "Empowering young people to develop innovative solutions for social challenges in their communities.",
+        "impact": "50+ youth-led projects launched",
+        "region": "Epirus",
+        "year": "2025",
+        "category": "Youth Development",
+        "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
+        "isActive": True,
+        "order": 4
+    }
+]
+
+# ============================================================================
+# SETTINGS - Exact data from dashboard  
+# ============================================================================
+SETTINGS_DATA = {
+    "hero_stats": {
+        "settingKey": "hero_stats",
+        "settingValue": {
+            "stats": [
+                {"number": "500+", "label": "Social Enterprises and CSOs Supported"},
+                {"number": "50+", "label": "Training Programs Delivered"},
+                {"number": "13", "label": "Regions Covered"},
+                {"number": "10K+", "label": "Lives Impacted"}
+            ]
+        },
+        "isActive": True
+    },
+    "contact_info": {
+        "settingKey": "contact_info",
+        "settingValue": {
+            "address": "Pellis 2, Nea Filadelfia, Attiki, Greece",
+            "phone": "+30 211 7057627",
+            "email": "info@3ts.gr",
+            "workingHours": "Monday - Friday: 9:00 AM - 6:00 PM"
+        },
+        "isActive": True
+    },
+    "company_info": {
+        "settingKey": "company_info",
+        "settingValue": {
+            "name": "Three Thirds Society",
+            "shortName": "3TS",
+            "tagline": "Social Economy & Innovation",
+            "description": "We are a leading social economy organization dedicated to improving the quality of life for disadvantaged and vulnerable social groups through innovative solutions, training, and sustainable development programs."
+        },
+        "isActive": True
+    }
+}
+
+# ============================================================================
+# BUTTON CONFIGURATIONS - All Learn More popups and button settings
+# ============================================================================
+BUTTON_CONFIGS = [
     {
         "buttonId": "hero_cta_primary",
         "section": "hero",
@@ -207,6 +257,37 @@ We remain committed to shaping an enabling institutional environment for the Soc
 • Strong networks with municipalities, regions, universities, NGOs and EU partners""",
         "buttonStyle": "outline",
         "order": 2
+    },
+    # Service Learn More buttons
+    {
+        "buttonId": "service_learn_more_85fceec4-ee13-45b1-90b3-b2a5a306dcf4",
+        "section": "services",
+        "label": "Learn More",
+        "isVisible": True,
+        "clickAction": "show_message",
+        "clickMessage": """Social Economy Workshops & Conferences
+
+THREE THIRDS SOCIETY designs and delivers Social Economy workshops and conferences that strengthen civil society actors, support policy dialogue, and contribute to inclusive and sustainable regional development.
+
+Our events serve as platforms for learning, exchange, and collaboration, bringing together social enterprises, cooperatives, CSOs, public authorities, policymakers, academics, and European partners. Through participatory and practice-oriented formats, we promote innovative social economy models, enhance organizational capacity, and foster cross-sector cooperation.
+
+We organize local, regional, national, and European-level events, focusing on key thematic areas such as social entrepreneurship, cooperative development, youth employment and NEET inclusion, social innovation, community-led development, and the green and digital transition. Special emphasis is placed on connecting grassroots experience with policy frameworks and funding opportunities at regional, national, and EU levels.
+
+Our methodological approach combines interactive workshops, thematic panels, peer learning, case studies, and structured policy dialogues, ensuring meaningful engagement and practical outcomes for participants. Events are often linked to ongoing projects, regional Social Hubs, and policy initiatives, reinforcing long-term impact beyond single activities.
+
+By organizing Social Economy workshops and conferences, THREE THIRDS SOCIETY contributes to:
+
+• Capacity building of social economy actors and civil society organizations
+
+• Strengthening regional social economy ecosystems
+
+• Enhancing multi-stakeholder cooperation and knowledge exchange
+
+• Supporting evidence-based policymaking and institutional development
+
+With more than a decade of experience and a strong presence at regional and European levels, THREE THIRDS SOCIETY acts as a trusted facilitator and convenor, supporting communities and institutions in shaping resilient, inclusive, and sustainable local economies.""",
+        "buttonStyle": "outline",
+        "order": 1
     },
     {
         "buttonId": "service_learn_more_1",
@@ -390,159 +471,69 @@ Through strategic networking and partnership facilitation, THREE THIRDS SOCIETY 
     }
 ]
 
-# Service for Social Economy Workshops - needs special handling due to dynamic ID
-WORKSHOPS_SERVICE_LEARN_MORE = {
-    "section": "services",
-    "label": "Learn More",
-    "isVisible": True,
-    "clickAction": "show_message",
-    "clickMessage": """Social Economy Workshops & Conferences
-
-THREE THIRDS SOCIETY designs and delivers Social Economy workshops and conferences that strengthen civil society actors, support policy dialogue, and contribute to inclusive and sustainable regional development.
-
-Our events serve as platforms for learning, exchange, and collaboration, bringing together social enterprises, cooperatives, CSOs, public authorities, policymakers, academics, and European partners. Through participatory and practice-oriented formats, we promote innovative social economy models, enhance organizational capacity, and foster cross-sector cooperation.
-
-We organize local, regional, national, and European-level events, focusing on key thematic areas such as social entrepreneurship, cooperative development, youth employment and NEET inclusion, social innovation, community-led development, and the green and digital transition. Special emphasis is placed on connecting grassroots experience with policy frameworks and funding opportunities at regional, national, and EU levels.
-
-Our methodological approach combines interactive workshops, thematic panels, peer learning, case studies, and structured policy dialogues, ensuring meaningful engagement and practical outcomes for participants. Events are often linked to ongoing projects, regional Social Hubs, and policy initiatives, reinforcing long-term impact beyond single activities.
-
-By organizing Social Economy workshops and conferences, THREE THIRDS SOCIETY contributes to:
-
-• Capacity building of social economy actors and civil society organizations
-
-• Strengthening regional social economy ecosystems
-
-• Enhancing multi-stakeholder cooperation and knowledge exchange
-
-• Supporting evidence-based policymaking and institutional development
-
-With more than a decade of experience and a strong presence at regional and European levels, THREE THIRDS SOCIETY acts as a trusted facilitator and convenor, supporting communities and institutions in shaping resilient, inclusive, and sustainable local economies.""",
-    "buttonStyle": "outline",
-    "order": 1
-}
-
-UPDATED_SETTINGS = [
-    {
-        "settingKey": "contact_info",
-        "settingValue": {
-            "address": "Pellis 2, Nea Filadelfia, Attiki, Greece",
-            "phone": "+30 211 7057627",
-            "email": "info@3ts.gr",
-            "workingHours": "Monday - Friday: 9:00 AM - 6:00 PM"
-        },
-        "isActive": True
-    },
-    {
-        "settingKey": "hero_stats",
-        "settingValue": {
-            "stats": [
-                {"number": "500+", "label": "Social Enterprises and CSOs Supported"},
-                {"number": "50+", "label": "Training Programs Delivered"},
-                {"number": "13", "label": "Regions Covered"},
-                {"number": "10K+", "label": "Lives Impacted"}
-            ]
-        },
-        "isActive": True
-    },
-    {
-        "settingKey": "company_info",
-        "settingValue": {
-            "name": "Three Thirds Society",
-            "shortName": "3TS",
-            "tagline": "Social Economy & Innovation",
-            "description": "We are a leading social economy organization dedicated to improving the quality of life for disadvantaged and vulnerable social groups through innovative solutions, training, and sustainable development programs."
-        },
-        "isActive": True
-    }
-]
 
 async def migrate_custom_content():
-    """Migrate all custom content to ensure it exists in the database"""
+    """
+    Migrate ALL custom content to ensure production has exact same data as dashboard.
+    This REPLACES existing data to ensure consistency.
+    """
     try:
-        logger.info("Starting custom content migration...")
+        logger.info("=" * 60)
+        logger.info("Starting FULL content migration to production...")
+        logger.info("=" * 60)
         
-        # FIRST: Ensure services exist
-        services_count = await services_collection.count_documents({})
-        logger.info(f"Found {services_count} existing services")
+        # =============================================
+        # STEP 1: Clear and repopulate SERVICES
+        # =============================================
+        logger.info("Step 1: Migrating services...")
+        await services_collection.delete_many({})
+        for service in SERVICES_DATA:
+            service["createdAt"] = datetime.utcnow()
+            service["updatedAt"] = datetime.utcnow()
+            await services_collection.insert_one(service)
+            logger.info(f"  ✓ Inserted service: {service['title']}")
+        logger.info(f"  Total services: {len(SERVICES_DATA)}")
         
-        if services_count == 0:
-            logger.info("No services found, inserting all services...")
-            for service_data in SERVICES_DATA:
-                service_data["createdAt"] = datetime.utcnow()
-                service_data["updatedAt"] = datetime.utcnow()
-                await services_collection.insert_one(service_data)
-                logger.info(f"Inserted service: {service_data['title']}")
-        else:
-            # Update existing services or insert missing ones
-            for service_data in SERVICES_DATA:
-                existing = await services_collection.find_one({"title": service_data["title"]})
-                if not existing:
-                    service_data["createdAt"] = datetime.utcnow()
-                    service_data["updatedAt"] = datetime.utcnow()
-                    await services_collection.insert_one(service_data)
-                    logger.info(f"Inserted missing service: {service_data['title']}")
+        # =============================================
+        # STEP 2: Clear and repopulate PROJECTS
+        # =============================================
+        logger.info("Step 2: Migrating projects...")
+        await projects_collection.delete_many({})
+        for project in PROJECTS_DATA:
+            project["createdAt"] = datetime.utcnow()
+            project["updatedAt"] = datetime.utcnow()
+            await projects_collection.insert_one(project)
+            logger.info(f"  ✓ Inserted project: {project['title']}")
+        logger.info(f"  Total projects: {len(PROJECTS_DATA)}")
         
-        # SECOND: Ensure projects exist
-        projects_count = await projects_collection.count_documents({})
-        logger.info(f"Found {projects_count} existing projects")
-        
-        if projects_count == 0:
-            logger.info("No projects found, inserting all projects...")
-            for project_data in PROJECTS_DATA:
-                project_data["createdAt"] = datetime.utcnow()
-                project_data["updatedAt"] = datetime.utcnow()
-                await projects_collection.insert_one(project_data)
-                logger.info(f"Inserted project: {project_data['title']}")
-        else:
-            # Insert missing projects
-            for project_data in PROJECTS_DATA:
-                existing = await projects_collection.find_one({"title": project_data["title"]})
-                if not existing:
-                    project_data["createdAt"] = datetime.utcnow()
-                    project_data["updatedAt"] = datetime.utcnow()
-                    await projects_collection.insert_one(project_data)
-                    logger.info(f"Inserted missing project: {project_data['title']}")
-        
-        # Migrate button configurations
-        for btn_config in CUSTOM_BUTTON_CONFIGS:
-            existing = await button_configs_collection.find_one({"buttonId": btn_config["buttonId"]})
-            if existing:
-                # Update existing button
-                await button_configs_collection.update_one(
-                    {"buttonId": btn_config["buttonId"]},
-                    {"$set": btn_config}
-                )
-                logger.info(f"Updated button: {btn_config['buttonId']}")
-            else:
-                # Insert new button
-                await button_configs_collection.insert_one(btn_config)
-                logger.info(f"Inserted button: {btn_config['buttonId']}")
-        
-        # Handle the workshops service learn more button (dynamic ID)
-        workshops_service = await services_collection.find_one({"title": {"$regex": "Workshop", "$options": "i"}})
-        if workshops_service:
-            workshops_btn_id = f"service_learn_more_{workshops_service.get('id')}"
-            workshops_btn = {**WORKSHOPS_SERVICE_LEARN_MORE, "buttonId": workshops_btn_id}
-            existing = await button_configs_collection.find_one({"buttonId": workshops_btn_id})
-            if existing:
-                await button_configs_collection.update_one(
-                    {"buttonId": workshops_btn_id},
-                    {"$set": workshops_btn}
-                )
-            else:
-                await button_configs_collection.insert_one(workshops_btn)
-            logger.info(f"Configured workshops button: {workshops_btn_id}")
-        
-        # Update settings
-        for setting in UPDATED_SETTINGS:
+        # =============================================
+        # STEP 3: Update SETTINGS
+        # =============================================
+        logger.info("Step 3: Migrating settings...")
+        for key, setting in SETTINGS_DATA.items():
             await company_settings_collection.update_one(
-                {"settingKey": setting["settingKey"]},
+                {"settingKey": key},
                 {"$set": setting},
                 upsert=True
             )
-            logger.info(f"Updated setting: {setting['settingKey']}")
+            logger.info(f"  ✓ Updated setting: {key}")
         
-        logger.info("Custom content migration completed successfully")
+        # =============================================
+        # STEP 4: Clear and repopulate BUTTONS
+        # =============================================
+        logger.info("Step 4: Migrating button configurations...")
+        await button_configs_collection.delete_many({})
+        for btn in BUTTON_CONFIGS:
+            btn["createdAt"] = datetime.utcnow()
+            btn["updatedAt"] = datetime.utcnow()
+            await button_configs_collection.insert_one(btn)
+            logger.info(f"  ✓ Inserted button: {btn['buttonId']}")
+        logger.info(f"  Total buttons: {len(BUTTON_CONFIGS)}")
+        
+        logger.info("=" * 60)
+        logger.info("Content migration completed successfully!")
+        logger.info("=" * 60)
         
     except Exception as e:
-        logger.error(f"Error during custom content migration: {str(e)}")
+        logger.error(f"Error during content migration: {str(e)}")
+        raise
