@@ -9,6 +9,7 @@ from contextlib import asynccontextmanager
 
 # Import database initialization
 from database import init_database, seed_initial_data, close_database
+from content_migration import migrate_custom_content
 
 # Import route modules
 from routes.services import router as services_router
