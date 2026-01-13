@@ -431,6 +431,28 @@ UPDATED_SETTINGS = [
             "workingHours": "Monday - Friday: 9:00 AM - 6:00 PM"
         },
         "isActive": True
+    },
+    {
+        "settingKey": "hero_stats",
+        "settingValue": {
+            "stats": [
+                {"number": "500+", "label": "Social Enterprises and CSOs Supported"},
+                {"number": "50+", "label": "Training Programs Delivered"},
+                {"number": "13", "label": "Regions Covered"},
+                {"number": "10K+", "label": "Lives Impacted"}
+            ]
+        },
+        "isActive": True
+    },
+    {
+        "settingKey": "company_info",
+        "settingValue": {
+            "name": "Three Thirds Society",
+            "shortName": "3TS",
+            "tagline": "Social Economy & Innovation",
+            "description": "We are a leading social economy organization dedicated to improving the quality of life for disadvantaged and vulnerable social groups through innovative solutions, training, and sustainable development programs."
+        },
+        "isActive": True
     }
 ]
 
