@@ -387,6 +387,27 @@ async def migrate_custom_content():
     try:
         logger.info("Starting custom content migration...")
         
+        # FIRST: Ensure services exist
+        services_count = await services_collection.count_documents({})
+        logger.info(f"Found {services_count} existing services")
+        
+        if services_count == 0:
+            logger.info("No services found, inserting all services...")
+            for service_data in SERVICES_DATA:
+                service_data["createdAt"] = datetime.utcnow()
+                service_data["updatedAt"] = datetime.utcnow()
+                await services_collection.insert_one(service_data)
+                logger.info(f"Inserted service: {service_data['title']}")
+        else:
+            # Update existing services or insert missing ones
+            for service_data in SERVICES_DATA:
+                existing = await services_collection.find_one({"title": service_data["title"]})
+                if not existing:
+                    service_data["createdAt"] = datetime.utcnow()
+                    service_data["updatedAt"] = datetime.utcnow()
+                    await services_collection.insert_one(service_data)
+                    logger.info(f"Inserted missing service: {service_data['title']}")
+        
         # Migrate button configurations
         for btn_config in CUSTOM_BUTTON_CONFIGS:
             existing = await button_configs_collection.find_one({"buttonId": btn_config["buttonId"]})
