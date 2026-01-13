@@ -3,12 +3,64 @@ Custom content migration for Three Thirds Society website.
 This ensures all button configurations, services, and content are present in the database.
 """
 
-from database import button_configs_collection, company_settings_collection, services_collection
+from database import button_configs_collection, company_settings_collection, services_collection, projects_collection
 from datetime import datetime
 import logging
 import uuid
 
 logger = logging.getLogger(__name__)
+
+# Projects data - ensure all projects exist
+PROJECTS_DATA = [
+    {
+        "id": "1",
+        "title": "Epirus Social Hub",
+        "description": "A comprehensive initiative to stimulate and support social enterprises in the Epirus region, fostering economic and social recovery.",
+        "impact": "25+ social enterprises launched",
+        "region": "Epirus",
+        "year": "2023-2024",
+        "category": "Regional Development",
+        "image": "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=600&fit=crop",
+        "isActive": True,
+        "order": 1
+    },
+    {
+        "id": "2",
+        "title": "Digital Convergence Initiative",
+        "description": "Bridging the digital divide by providing technology access and digital literacy training to vulnerable communities.",
+        "impact": "1,200+ people trained in digital skills",
+        "region": "Attica",
+        "year": "2023",
+        "category": "Digital Inclusion",
+        "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop",
+        "isActive": True,
+        "order": 2
+    },
+    {
+        "id": "3",
+        "title": "Women's Economic Empowerment",
+        "description": "Supporting women's organizations and female entrepreneurs through targeted training and funding opportunities.",
+        "impact": "150+ women entrepreneurs supported",
+        "region": "Peloponnese",
+        "year": "2022-2023",
+        "category": "Gender Equality",
+        "image": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=600&fit=crop",
+        "isActive": True,
+        "order": 3
+    },
+    {
+        "id": "4",
+        "title": "Youth Social Innovation Lab",
+        "description": "Empowering young people to develop innovative solutions for social challenges in their communities.",
+        "impact": "50+ youth-led projects launched",
+        "region": "Thessaly",
+        "year": "2023",
+        "category": "Youth Development",
+        "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
+        "isActive": True,
+        "order": 4
+    }
+]
 
 # Services data - ensure all services exist
 SERVICES_DATA = [
