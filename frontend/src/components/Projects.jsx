@@ -9,6 +9,29 @@ import axios from 'axios';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
+// Default images by category
+const CATEGORY_DEFAULT_IMAGES = {
+  'Regional Development': 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=600&fit=crop',
+  'Digital Inclusion': 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=600&fit=crop',
+  'Gender Equality': 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=600&fit=crop',
+  'Youth Development': 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop',
+  'Social Enterprise': 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop',
+  'Training & Education': 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&h=600&fit=crop',
+  'Research & Innovation': 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&h=600&fit=crop',
+  'Community Building': 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&h=600&fit=crop',
+  'default': 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800&h=600&fit=crop'
+};
+
+// Get the appropriate image for a project
+const getProjectImage = (project) => {
+  // If project has a valid image URL, use it
+  if (project.image && project.image.trim() !== '') {
+    return project.image;
+  }
+  // Otherwise, return category default or general default
+  return CATEGORY_DEFAULT_IMAGES[project.category] || CATEGORY_DEFAULT_IMAGES['default'];
+};
+
 export const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
