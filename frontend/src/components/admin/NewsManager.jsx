@@ -27,6 +27,9 @@ export const NewsManager = ({ credentials }) => {
   const [loading, setLoading] = useState(true);
   const [editingArticle, setEditingArticle] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     title: '',
     summary: '',
@@ -43,6 +46,8 @@ export const NewsManager = ({ credentials }) => {
       password: credentials.password
     }
   };
+
+  const authToken = btoa(`${credentials.username}:${credentials.password}`);
 
   useEffect(() => {
     fetchArticles();
