@@ -12,12 +12,14 @@ Build a modern, professional website for "Three Thirds Society" (3ts.gr), a soci
    - Hero section with organization overview
    - Services section
    - Projects showcase
-   - Contact form
+   - News & Updates section
+   - Contact form (with email notifications)
    - Company document downloads (PDF/DOCX)
    
 2. Admin Dashboard:
    - Password-protected access
-   - Full CRUD for Services and Projects
+   - Full CRUD for Services, Projects, and News
+   - Image upload functionality for Projects and News
    - Settings management (Hero stats, contact info)
    - Button configuration management
    - Contact form inquiry viewer
@@ -27,21 +29,35 @@ Build a modern, professional website for "Three Thirds Society" (3ts.gr), a soci
 - **Backend**: FastAPI with Pydantic models
 - **Database**: MongoDB
 - **Routing**: React Router for frontend, RESTful APIs for backend
+- **File Storage**: Local uploads directory with API endpoints
 
 ## What's Been Implemented
 
+### January 14, 2026
+- **Image Upload Feature**: Added direct image upload for Projects and News sections
+  - File upload endpoint at `/api/upload/image`
+  - Supports JPG, PNG, GIF, WebP (max 10MB)
+  - Image serving at `/api/upload/images/{filename}`
+  - Both Projects and News forms now have "Upload Image" button alongside URL option
+- **Content Migration Script Verified**: Tested and confirmed working locally
+  - All 7 services, 4 projects, 13 buttons, and settings migrate on startup
+  - Ready for production deployment
+
+### January 13, 2026
+- **Content Migration Script**: Created comprehensive `content_migration.py` to sync all dashboard content to production database on startup
+- **Email Integration**: Contact form now sends emails to `info@3ts.gr` via dnhost SMTP
+- **News & Updates Section**: Full CRUD module with admin management
+- **Service Popup Content**: Detailed Learn More popups for all 7 services
+
 ### January 12, 2026
-- **Fixed MongoDB Atlas connection timeout**: Added proper connection settings (30s timeouts, retry logic, connection pooling) for MongoDB Atlas replica sets
-- **Made database initialization resilient**: App now starts even if initial DB connection is slow, with retry logic and non-blocking index creation
-- **Fixed deployment error**: Exception handlers now return `JSONResponse` objects instead of dicts
+- **Fixed MongoDB Atlas connection timeout**: Added proper connection settings
+- **Made database initialization resilient**: App starts even if DB slow
+- **Fixed deployment error**: Exception handlers return JSONResponse
 - **Added root-level `/health` endpoint** for Kubernetes health probes
-- **Removed "Made with Emergent" badge** from website footer
-- **Updated page title** to "Three Thirds Society | Social Economy & Innovation"
-- **Updated meta description** to be organization-relevant
 
 ### Previous Session (Completed)
 - Full-stack website with React frontend, FastAPI backend, MongoDB
-- Admin dashboard at `/admin` with password protection (254TFD98)
+- Admin dashboard at `/admin` with password protection
 - Dynamic button management system
 - Document integration (PDF/DOCX downloads)
 - Official logo integration
