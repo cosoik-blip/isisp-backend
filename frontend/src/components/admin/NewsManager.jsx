@@ -158,6 +158,55 @@ export const NewsManager = ({ credentials }) => {
     setEditingArticle(null);
     setIsCreating(false);
     resetForm();
+    setUploadError('');
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError('Invalid file type. Please upload JPG, PNG, GIF, or WebP.');
+      return;
+    }
+
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError('File too large. Maximum size is 10MB.');
+      return;
+    }
+
+    setUploading(true);
+    setUploadError('');
+
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+
+      const response = await fetch(`${API}/upload/image`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${authToken}`
+        },
+        body: uploadFormData
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFormData(prev => ({ ...prev, image: data.url }));
+        setUploadError('');
+      } else {
+        const error = await response.json();
+        setUploadError(error.detail || 'Failed to upload image');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      setUploadError('Failed to upload image. Please try again.');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const formatDate = (dateString) => {
