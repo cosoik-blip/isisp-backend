@@ -91,6 +91,7 @@ app.include_router(settings_router)
 app.include_router(admin_router)
 app.include_router(buttons_router)
 app.include_router(news_router)
+app.include_router(upload_router)
 
 # Include the main API router
 app.include_router(api_router)
