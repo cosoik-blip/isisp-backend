@@ -1,4 +1,4 @@
-from motor.motor_asyncio import AsyncIOMotorClient
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 import os
 from dotenv import load_dotenv
 from pathlib import Path
@@ -36,6 +36,10 @@ company_settings_collection = db.company_settings
 team_members_collection = db.team_members
 button_configs_collection = db.button_configs
 news_collection = db.news
+uploaded_files_collection = db.uploaded_files
+
+# GridFS for storing larger files
+fs_bucket = AsyncIOMotorGridFSBucket(db)
 
 async def init_database():
     """Initialize database with indexes and default data"""
