@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -13,7 +13,9 @@ import {
   Newspaper,
   Calendar,
   Eye,
-  EyeOff
+  EyeOff,
+  Image as ImageIcon,
+  AlertCircle
 } from 'lucide-react';
 import axios from 'axios';
 
