@@ -158,6 +158,7 @@ export const ProjectsManager = ({ authToken }) => {
             setIsCreating(false);
           }}
           isEditing={!!editingProject}
+          authToken={authToken}
         />
       )}
 
