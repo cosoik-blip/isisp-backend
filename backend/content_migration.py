@@ -474,40 +474,59 @@ Through strategic networking and partnership facilitation, THREE THIRDS SOCIETY 
 
 async def migrate_custom_content():
     """
-    Migrate ALL custom content to ensure production has exact same data as dashboard.
-    This REPLACES existing data to ensure consistency.
+    Migrate custom content only if collections are empty (first-time setup).
+    This preserves any data added via the dashboard.
     """
     try:
         logger.info("=" * 60)
-        logger.info("Starting FULL content migration to production...")
+        logger.info("Checking if content migration is needed...")
         logger.info("=" * 60)
         
         # =============================================
-        # STEP 1: Clear and repopulate SERVICES
+        # CHECK IF DATA ALREADY EXISTS - Skip if it does
         # =============================================
-        logger.info("Step 1: Migrating services...")
-        await services_collection.delete_many({})
-        for service in SERVICES_DATA:
-            service["createdAt"] = datetime.utcnow()
-            service["updatedAt"] = datetime.utcnow()
-            await services_collection.insert_one(service)
-            logger.info(f"  ✓ Inserted service: {service['title']}")
-        logger.info(f"  Total services: {len(SERVICES_DATA)}")
+        existing_services = await services_collection.count_documents({})
+        existing_projects = await projects_collection.count_documents({})
+        existing_buttons = await button_configs_collection.count_documents({})
+        
+        if existing_services > 0 and existing_projects > 0 and existing_buttons > 0:
+            logger.info(f"Data already exists (Services: {existing_services}, Projects: {existing_projects}, Buttons: {existing_buttons})")
+            logger.info("Skipping migration to preserve dashboard data.")
+            logger.info("=" * 60)
+            return
+        
+        logger.info("No existing data found. Running initial content setup...")
         
         # =============================================
-        # STEP 2: Clear and repopulate PROJECTS
+        # STEP 1: Populate SERVICES (only if empty)
         # =============================================
-        logger.info("Step 2: Migrating projects...")
-        await projects_collection.delete_many({})
-        for project in PROJECTS_DATA:
-            project["createdAt"] = datetime.utcnow()
-            project["updatedAt"] = datetime.utcnow()
-            await projects_collection.insert_one(project)
-            logger.info(f"  ✓ Inserted project: {project['title']}")
-        logger.info(f"  Total projects: {len(PROJECTS_DATA)}")
+        if existing_services == 0:
+            logger.info("Step 1: Migrating services...")
+            for service in SERVICES_DATA:
+                service["createdAt"] = datetime.utcnow()
+                service["updatedAt"] = datetime.utcnow()
+                await services_collection.insert_one(service)
+                logger.info(f"  ✓ Inserted service: {service['title']}")
+            logger.info(f"  Total services: {len(SERVICES_DATA)}")
+        else:
+            logger.info(f"Step 1: Skipping services (already have {existing_services})")
         
         # =============================================
-        # STEP 3: Update SETTINGS
+        # STEP 2: Populate PROJECTS (only if empty)
+        # =============================================
+        if existing_projects == 0:
+            logger.info("Step 2: Migrating projects...")
+            for project in PROJECTS_DATA:
+                project["createdAt"] = datetime.utcnow()
+                project["updatedAt"] = datetime.utcnow()
+                await projects_collection.insert_one(project)
+                logger.info(f"  ✓ Inserted project: {project['title']}")
+            logger.info(f"  Total projects: {len(PROJECTS_DATA)}")
+        else:
+            logger.info(f"Step 2: Skipping projects (already have {existing_projects})")
+        
+        # =============================================
+        # STEP 3: Update SETTINGS (upsert - safe to run)
         # =============================================
         logger.info("Step 3: Migrating settings...")
         for key, setting in SETTINGS_DATA.items():
@@ -519,16 +538,18 @@ async def migrate_custom_content():
             logger.info(f"  ✓ Updated setting: {key}")
         
         # =============================================
-        # STEP 4: Clear and repopulate BUTTONS
+        # STEP 4: Populate BUTTONS (only if empty)
         # =============================================
-        logger.info("Step 4: Migrating button configurations...")
-        await button_configs_collection.delete_many({})
-        for btn in BUTTON_CONFIGS:
-            btn["createdAt"] = datetime.utcnow()
-            btn["updatedAt"] = datetime.utcnow()
-            await button_configs_collection.insert_one(btn)
-            logger.info(f"  ✓ Inserted button: {btn['buttonId']}")
-        logger.info(f"  Total buttons: {len(BUTTON_CONFIGS)}")
+        if existing_buttons == 0:
+            logger.info("Step 4: Migrating button configurations...")
+            for btn in BUTTON_CONFIGS:
+                btn["createdAt"] = datetime.utcnow()
+                btn["updatedAt"] = datetime.utcnow()
+                await button_configs_collection.insert_one(btn)
+                logger.info(f"  ✓ Inserted button: {btn['buttonId']}")
+            logger.info(f"  Total buttons: {len(BUTTON_CONFIGS)}")
+        else:
+            logger.info(f"Step 4: Skipping buttons (already have {existing_buttons})")
         
         logger.info("=" * 60)
         logger.info("Content migration completed successfully!")
