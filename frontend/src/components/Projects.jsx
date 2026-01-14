@@ -158,16 +158,6 @@ export const Projects = () => {
                       {project.impact}
                     </div>
                   </div>
-
-                  <DynamicButton 
-                    buttonId={`project_details_${project.id}`}
-                    fallbackText="View Project Details"
-                    fallbackStyle="outline"
-                    className="w-full justify-between"
-                  >
-                    View Project Details
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-                  </DynamicButton>
                 </div>
               </CardContent>
             </Card>
