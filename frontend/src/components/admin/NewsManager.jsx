@@ -301,12 +301,72 @@ export const NewsManager = ({ credentials }) => {
 
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-                <Input
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="https://example.com/image.jpg"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
+                
+                {/* Image Preview */}
+                {formData.image && (
+                  <div className="mb-3 relative inline-block">
+                    <img 
+                      src={formData.image} 
+                      alt="Article preview" 
+                      className="w-32 h-24 object-cover rounded-lg border border-gray-200"
+                      onError={(e) => {
+                        e.target.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="96" viewBox="0 0 128 96"><rect fill="%23f3f4f6" width="128" height="96"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="12">Error</text></svg>';
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setFormData({...formData, image: ''})}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
+
+                {/* Upload Options */}
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/gif,image/webp"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={uploading}
+                    >
+                      {uploading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-500 mr-2"></div>
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <ImageIcon className="w-3 h-3 mr-2" />
+                          Upload
+                        </>
+                      )}
+                    </Button>
+                    <span className="text-xs text-gray-500">or</span>
+                  </div>
+                  <Input
+                    value={formData.image}
+                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                    placeholder="https://example.com/image.jpg"
+                  />
+                  {uploadError && (
+                    <p className="text-xs text-red-600 flex items-center">
+                      <AlertCircle className="w-3 h-3 mr-1" />
+                      {uploadError}
+                    </p>
+                  )}
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Author</label>
