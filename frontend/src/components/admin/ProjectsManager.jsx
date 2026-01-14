@@ -238,7 +238,7 @@ export const ProjectsManager = ({ authToken }) => {
   );
 };
 
-const ProjectForm = ({ project, onSave, onCancel, isEditing }) => {
+const ProjectForm = ({ project, onSave, onCancel, isEditing, authToken }) => {
   const [formData, setFormData] = useState({
     title: project.title || '',
     description: project.description || '',
@@ -249,12 +249,63 @@ const ProjectForm = ({ project, onSave, onCancel, isEditing }) => {
     image: project.image || '',
     order: project.order || 0
   });
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const fileInputRef = React.useRef(null);
 
   const categoryOptions = [
     'Regional Development', 'Digital Inclusion', 'Gender Equality', 
     'Youth Development', 'Social Enterprise', 'Training & Education',
     'Research & Innovation', 'Community Building'
   ];
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError('Invalid file type. Please upload JPG, PNG, GIF, or WebP.');
+      return;
+    }
+
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError('File too large. Maximum size is 10MB.');
+      return;
+    }
+
+    setUploading(true);
+    setUploadError('');
+
+    try {
+      const formDataUpload = new FormData();
+      formDataUpload.append('file', file);
+
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload/image`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${authToken}`
+        },
+        body: formDataUpload
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFormData(prev => ({ ...prev, image: data.url }));
+        setUploadError('');
+      } else {
+        const error = await response.json();
+        setUploadError(error.detail || 'Failed to upload image');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      setUploadError('Failed to upload image. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -361,24 +412,89 @@ const ProjectForm = ({ project, onSave, onCancel, isEditing }) => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Image URL
+              Project Image
             </label>
-            <Input
-              type="url"
-              value={formData.image}
-              onChange={(e) => setFormData({...formData, image: e.target.value})}
-              placeholder="https://example.com/image.jpg"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Enter a direct link to an image (recommended: 800x600px)
-            </p>
+            
+            {/* Image Preview */}
+            {formData.image && (
+              <div className="mb-3 relative inline-block">
+                <img 
+                  src={formData.image} 
+                  alt="Project preview" 
+                  className="w-48 h-32 object-cover rounded-lg border border-gray-200"
+                  onError={(e) => {
+                    e.target.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="192" height="128" viewBox="0 0 192 128"><rect fill="%23f3f4f6" width="192" height="128"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="14">Image Error</text></svg>';
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setFormData({...formData, image: ''})}
+                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            {/* Upload Options */}
+            <div className="space-y-3">
+              {/* File Upload */}
+              <div className="flex items-center space-x-3">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/gif,image/webp"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="flex items-center"
+                >
+                  {uploading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-emerald-500 mr-2"></div>
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <ImageIcon className="w-4 h-4 mr-2" />
+                      Upload Image
+                    </>
+                  )}
+                </Button>
+                <span className="text-sm text-gray-500">or</span>
+              </div>
+
+              {/* URL Input */}
+              <Input
+                type="url"
+                value={formData.image}
+                onChange={(e) => setFormData({...formData, image: e.target.value})}
+                placeholder="Enter image URL (https://example.com/image.jpg)"
+              />
+              
+              {uploadError && (
+                <p className="text-sm text-red-600 flex items-center">
+                  <AlertCircle className="w-4 h-4 mr-1" />
+                  {uploadError}
+                </p>
+              )}
+              
+              <p className="text-xs text-gray-500">
+                Upload an image (JPG, PNG, GIF, WebP - max 10MB) or enter a direct URL. Recommended: 800x600px
+              </p>
+            </div>
           </div>
 
           <div className="flex justify-end space-x-3 pt-4">
             <Button type="button" variant="outline" onClick={onCancel}>
               Cancel
             </Button>
-            <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700">
+            <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700" disabled={uploading}>
               <Save className="w-4 h-4 mr-2" />
               {isEditing ? 'Update' : 'Create'} Project
             </Button>
