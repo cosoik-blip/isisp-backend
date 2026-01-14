@@ -1,28 +1,35 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, Header
-from fastapi.responses import FileResponse
+from fastapi.responses import Response
 import os
 import uuid
 import logging
 from pathlib import Path
-import aiofiles
+from datetime import datetime
+from database import uploaded_files_collection
+import base64
 
 router = APIRouter(prefix="/api/upload", tags=["upload"])
 logger = logging.getLogger(__name__)
 
-# Create uploads directory
-UPLOAD_DIR = Path("/app/backend/uploads")
-UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
-
 # Allowed image extensions
 ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+
+# Content types mapping
+CONTENT_TYPES = {
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.png': 'image/png',
+    '.gif': 'image/gif',
+    '.webp': 'image/webp'
+}
 
 @router.post("/image")
 async def upload_image(
     file: UploadFile = File(...),
     authorization: str = Header(None)
 ):
-    """Upload an image file and return its URL"""
+    """Upload an image file and store it in MongoDB"""
     try:
         # Validate authorization (basic check)
         if not authorization or not authorization.startswith("Basic "):
@@ -47,12 +54,20 @@ async def upload_image(
             )
         
         # Generate unique filename
-        unique_filename = f"{uuid.uuid4()}{file_ext}"
-        file_path = UPLOAD_DIR / unique_filename
+        unique_id = str(uuid.uuid4())
+        unique_filename = f"{unique_id}{file_ext}"
         
-        # Save file
-        async with aiofiles.open(file_path, 'wb') as f:
-            await f.write(content)
+        # Store in MongoDB
+        file_doc = {
+            "filename": unique_filename,
+            "original_filename": file.filename,
+            "content_type": CONTENT_TYPES.get(file_ext, 'application/octet-stream'),
+            "data": base64.b64encode(content).decode('utf-8'),
+            "size": len(content),
+            "uploaded_at": datetime.utcnow()
+        }
+        
+        await uploaded_files_collection.insert_one(file_doc)
         
         # Get the backend URL from environment
         backend_url = os.environ.get('REACT_APP_BACKEND_URL', '')
@@ -60,7 +75,7 @@ async def upload_image(
         # Return the URL to access the uploaded image
         image_url = f"{backend_url}/api/upload/images/{unique_filename}"
         
-        logger.info(f"Image uploaded successfully: {unique_filename}")
+        logger.info(f"Image uploaded successfully to MongoDB: {unique_filename}")
         
         return {
             "success": True,
@@ -76,30 +91,27 @@ async def upload_image(
 
 @router.get("/images/{filename}")
 async def get_image(filename: str):
-    """Serve an uploaded image"""
+    """Serve an uploaded image from MongoDB"""
     try:
-        # Sanitize filename to prevent directory traversal
+        # Sanitize filename to prevent issues
         safe_filename = Path(filename).name
-        file_path = UPLOAD_DIR / safe_filename
         
-        if not file_path.exists():
+        # Find the file in MongoDB
+        file_doc = await uploaded_files_collection.find_one({"filename": safe_filename})
+        
+        if not file_doc:
             raise HTTPException(status_code=404, detail="Image not found")
         
-        # Determine content type
-        ext = file_path.suffix.lower()
-        content_types = {
-            '.jpg': 'image/jpeg',
-            '.jpeg': 'image/jpeg',
-            '.png': 'image/png',
-            '.gif': 'image/gif',
-            '.webp': 'image/webp'
-        }
-        content_type = content_types.get(ext, 'application/octet-stream')
+        # Decode the base64 data
+        content = base64.b64decode(file_doc["data"])
         
-        return FileResponse(
-            path=file_path,
-            media_type=content_type,
-            filename=safe_filename
+        return Response(
+            content=content,
+            media_type=file_doc["content_type"],
+            headers={
+                "Cache-Control": "public, max-age=31536000",
+                "Content-Disposition": f"inline; filename={safe_filename}"
+            }
         )
         
     except HTTPException:
@@ -113,7 +125,7 @@ async def delete_image(
     filename: str,
     authorization: str = Header(None)
 ):
-    """Delete an uploaded image"""
+    """Delete an uploaded image from MongoDB"""
     try:
         # Validate authorization
         if not authorization or not authorization.startswith("Basic "):
@@ -121,13 +133,14 @@ async def delete_image(
         
         # Sanitize filename
         safe_filename = Path(filename).name
-        file_path = UPLOAD_DIR / safe_filename
         
-        if not file_path.exists():
+        # Delete from MongoDB
+        result = await uploaded_files_collection.delete_one({"filename": safe_filename})
+        
+        if result.deleted_count == 0:
             raise HTTPException(status_code=404, detail="Image not found")
         
-        os.remove(file_path)
-        logger.info(f"Image deleted: {filename}")
+        logger.info(f"Image deleted from MongoDB: {filename}")
         
         return {"success": True, "message": "Image deleted successfully"}
         
