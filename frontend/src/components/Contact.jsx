@@ -32,7 +32,7 @@ export const Contact = () => {
   
   const [contactInfo, setContactInfo] = useState({
     address: "Pellis 2, Nea Filadelfia, Attiki, Greece",
-    phone: "+30 211 7057627",
+    phone: "+30 210 2718039",
     email: "info@3ts.gr",
     workingHours: "Monday - Friday: 9:00 AM - 6:00 PM"
   });
