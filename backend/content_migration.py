@@ -553,6 +553,46 @@ Program highlights:
 This lab nurtures the next generation of social innovators and change-makers in Greece.""",
         "buttonStyle": "outline",
         "order": 1
+    },
+    # CRESINMED Project Learn More button
+    {
+        "buttonId": "project_learn_more_cresinmed",
+        "section": "projects",
+        "label": "Learn More",
+        "isVisible": True,
+        "clickAction": "show_message",
+        "clickMessage": """CReSInMed – Competitiveness and Internationalisation of Rural Tourism SMEs in the Mediterranean
+
+Rural tourism plays a crucial role in the Mediterranean, contributing to local economies, cultural heritage preservation and social cohesion. However, tourism micro, small and medium-sized enterprises operating in rural areas often face structural barriers that limit their growth and international reach.
+
+CReSInMed responds to these shared regional challenges by supporting rural tourism (M)SMEs across both shores of the Mediterranean. Co-funded by the European Union under the Interreg NEXT MED Programme, the project brings together partners from Italy, Greece, Türkiye, Jordan, Spain, Palestine and Tunisia to strengthen cooperation, build capacities and foster sustainable economic development in rural areas.
+
+OBJECTIVES
+The main objective of CReSInMed is to strengthen the competitiveness and internationalisation capacity of micro, small and medium-sized tourism enterprises operating in rural Mediterranean areas. The project focuses on:
+• Improving skills, productivity and innovation capacity
+• Digital transition and sustainability
+• Fostering networks and partnerships among Mediterranean tourism businesses
+• Facilitating access to new markets and cross-border business opportunities
+
+PROJECT PARTNERS
+• Italy – Interforum Srl (Lead Partner)
+• Greece – THREE THIRDS SOCIETY (PP1)
+• Türkiye – West Mediterranean Development Agency (PP2)
+• Jordan – Aqaba Special Economic Zone Authority (PP3)
+• Spain – Official Chamber of Commerce, Industry, Services and Navigation of Valencia (PP5)
+• Palestine – Leaders Organisation (PP6)
+• Tunisia – Ministère du Tourisme (PP7)
+
+EXPECTED OUTCOMES
+CReSInMed will strengthen the competitiveness and internationalisation capacity of 50 rural tourism (M)SMEs across the Mediterranean by improving their managerial, technical and digital skills, with a strong focus on innovation, sustainability and market access.
+
+Project Duration: 36 months (January 2026 – January 2029)
+Total Budget: €2,561,648.80
+EU Contribution: €2,279,867.43 (89%)
+
+Learn more: https://www.interregnextmed.eu/project-page/cresinmed/about/""",
+        "buttonStyle": "outline",
+        "order": 1
     }
 ]
 
