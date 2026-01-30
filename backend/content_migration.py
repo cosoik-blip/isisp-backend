@@ -468,6 +468,91 @@ We facilitate structured knowledge exchange through workshops, conferences, peer
 Through strategic networking and partnership facilitation, THREE THIRDS SOCIETY enables stakeholders to collaborate effectively, mobilize collective resources, and co-create solutions that enhance social inclusion, regional development, and inclusive economic growth.""",
         "buttonStyle": "outline",
         "order": 1
+    },
+    # Project Learn More buttons
+    {
+        "buttonId": "project_learn_more_1",
+        "section": "projects",
+        "label": "Learn More",
+        "isVisible": True,
+        "clickAction": "show_message",
+        "clickMessage": """Epirus Social Hub
+
+The Epirus Social Hub is a comprehensive initiative designed to stimulate and support social enterprises in the Epirus region, fostering economic and social recovery.
+
+Through this project, THREE THIRDS SOCIETY provides:
+• Business development support and mentoring
+• Capacity building workshops and training
+• Networking opportunities with regional stakeholders
+• Access to funding information and guidance
+• Technical assistance for social enterprise creation
+
+The Hub serves as a catalyst for social economy development in Epirus, connecting local actors with resources and expertise to create sustainable social impact.""",
+        "buttonStyle": "outline",
+        "order": 1
+    },
+    {
+        "buttonId": "project_learn_more_2",
+        "section": "projects",
+        "label": "Learn More",
+        "isVisible": True,
+        "clickAction": "show_message",
+        "clickMessage": """Digital Convergence Initiative
+
+The Digital Convergence Initiative bridges the digital divide by providing technology access and digital literacy training to vulnerable communities in the Attica region.
+
+Key achievements:
+• 1,200+ people trained in digital skills
+• Digital literacy workshops for all age groups
+• Technology access programs for underserved communities
+• Online collaboration tools training
+• Support for digital transformation of local organizations
+
+This initiative empowers individuals and communities to participate fully in the digital economy and society.""",
+        "buttonStyle": "outline",
+        "order": 1
+    },
+    {
+        "buttonId": "project_learn_more_wg-hub-3",
+        "section": "projects",
+        "label": "Learn More",
+        "isVisible": True,
+        "clickAction": "show_message",
+        "clickMessage": """Western Greece Social Hub
+
+The Western Greece Social Hub provides advisory support and fosters cooperation between formal and informal sectors of social economy in the region of Western Greece.
+
+Our services include:
+• Advisory support for social enterprises and CSOs
+• Capacity building and training programs
+• Stakeholder engagement and networking
+• Policy dialogue facilitation
+• Technical assistance and mentoring
+
+With 50+ CSOs and Social Enterprises supported, this Hub strengthens the social economy ecosystem across Western Greece.""",
+        "buttonStyle": "outline",
+        "order": 1
+    },
+    {
+        "buttonId": "project_learn_more_4",
+        "section": "projects",
+        "label": "Learn More",
+        "isVisible": True,
+        "clickAction": "show_message",
+        "clickMessage": """Youth Social Innovation Lab
+
+The Youth Social Innovation Lab empowers young people to develop innovative solutions for social challenges in their communities across the Epirus region.
+
+Program highlights:
+• 50+ youth-led projects launched
+• Innovation workshops and hackathons
+• Mentorship from experienced social entrepreneurs
+• Seed funding for promising initiatives
+• Skills development in project management and leadership
+
+This lab nurtures the next generation of social innovators and change-makers in Greece.""",
+        "buttonStyle": "outline",
+        "order": 1
     }
 ]
 
