@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -25,6 +25,7 @@ export const ButtonsManager = ({ authToken }) => {
   const [editingButton, setEditingButton] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+  const formRef = useRef(null);
 
   const emptyButton = {
     buttonId: '',
