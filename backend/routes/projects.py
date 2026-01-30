@@ -129,6 +129,11 @@ async def update_project(project_id: str, project_update: ProjectUpdate):
         if result.matched_count == 0:
             raise HTTPException(status_code=404, detail="Project not found")
         
+        # Ensure button exists for this project
+        project = await projects_collection.find_one({"id": project_id})
+        if project:
+            await create_project_button(project_id, project.get("title", "Project"))
+        
         logger.info(f"Updated project {project_id}")
         return APIResponse(success=True, message="Project updated successfully")
         
@@ -137,6 +142,30 @@ async def update_project(project_id: str, project_update: ProjectUpdate):
     except Exception as e:
         logger.error(f"Error updating project {project_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to update project")
+
+@router.post("/ensure-buttons", response_model=APIResponse)
+async def ensure_project_buttons():
+    """Create Learn More buttons for all existing projects that don't have one"""
+    try:
+        cursor = projects_collection.find({"isActive": True})
+        projects = await cursor.to_list(length=100)
+        
+        buttons_created = 0
+        for project in projects:
+            button_id = f"project_learn_more_{project['id']}"
+            existing = await button_configs_collection.find_one({"buttonId": button_id})
+            if not existing:
+                await create_project_button(project['id'], project['title'])
+                buttons_created += 1
+        
+        return APIResponse(
+            success=True, 
+            message=f"Created {buttons_created} new button(s) for existing projects"
+        )
+        
+    except Exception as e:
+        logger.error(f"Error ensuring project buttons: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to ensure project buttons")
 
 @router.delete("/{project_id}", response_model=APIResponse)
 async def delete_project(project_id: str):
