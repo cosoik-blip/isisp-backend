@@ -171,7 +171,7 @@ export const Projects = () => {
 
                   {/* Learn More Button - Configurable from Dashboard */}
                   <DynamicButton 
-                    buttonId={`project_learn_more_${project.id}`}
+                    buttonId={getProjectButtonId(project)}
                     fallbackText="Learn More"
                     fallbackStyle="outline"
                     className="w-full justify-center border-emerald-600 text-emerald-600 hover:bg-emerald-50"
