@@ -275,7 +275,13 @@ export const ButtonsManager = ({ authToken }) => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setEditingButton(button)}
+                          onClick={() => {
+                            setEditingButton(button);
+                            // Scroll to form after a short delay
+                            setTimeout(() => {
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }, 100);
+                          }}
                         >
                           <Edit className="w-4 h-4" />
                         </Button>
