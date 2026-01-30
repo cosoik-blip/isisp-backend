@@ -21,14 +21,15 @@ from database import (
 from datetime import datetime
 import logging
 import secrets
+import os
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 logger = logging.getLogger(__name__)
 security = HTTPBasic()
 
-# Admin credentials
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "254TFD98"
+# Admin credentials from environment variables
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "254TFD98")
 
 def authenticate_admin(credentials: HTTPBasicCredentials = Depends(security)):
     """Authenticate admin user"""
