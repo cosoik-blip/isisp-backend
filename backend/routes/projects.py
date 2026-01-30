@@ -1,12 +1,49 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
 from models import Project, ProjectCreate, ProjectUpdate, APIResponse
-from database import projects_collection
+from database import projects_collection, button_configs_collection
 from datetime import datetime
 import logging
 
 router = APIRouter(prefix="/api/projects", tags=["projects"])
 logger = logging.getLogger(__name__)
+
+async def create_project_button(project_id: str, project_title: str):
+    """Create a Learn More button config for a new project"""
+    try:
+        button_id = f"project_learn_more_{project_id}"
+        
+        # Check if button already exists
+        existing = await button_configs_collection.find_one({"buttonId": button_id})
+        if existing:
+            return
+        
+        button_config = {
+            "buttonId": button_id,
+            "section": "projects",
+            "label": "Learn More",
+            "isVisible": True,
+            "clickAction": "show_message",
+            "clickMessage": f"""{project_title}
+
+Click 'Edit' in the Buttons section of the dashboard to add detailed information about this project.
+
+You can customize:
+• Project overview and objectives
+• Key achievements and impact
+• Partners and stakeholders
+• Timeline and milestones""",
+            "buttonStyle": "outline",
+            "order": 1,
+            "createdAt": datetime.utcnow(),
+            "updatedAt": datetime.utcnow()
+        }
+        
+        await button_configs_collection.insert_one(button_config)
+        logger.info(f"Created Learn More button for project: {project_title}")
+        
+    except Exception as e:
+        logger.error(f"Error creating button for project {project_id}: {str(e)}")
 
 @router.get("/", response_model=List[Project])
 async def get_projects():
