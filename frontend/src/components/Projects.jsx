@@ -158,6 +158,15 @@ export const Projects = () => {
                       {project.impact}
                     </div>
                   </div>
+
+                  {/* Learn More Button */}
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-center border-emerald-600 text-emerald-600 hover:bg-emerald-50"
+                  >
+                    Learn More
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
                 </div>
               </CardContent>
             </Card>
