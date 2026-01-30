@@ -32,6 +32,16 @@ const getProjectImage = (project) => {
   return CATEGORY_DEFAULT_IMAGES[project.category] || CATEGORY_DEFAULT_IMAGES['default'];
 };
 
+// Get button ID for a project - handles special cases like CRESINMED
+const getProjectButtonId = (project) => {
+  // Check for CRESINMED project by title (case-insensitive)
+  if (project.title && project.title.toLowerCase().includes('cresinmed')) {
+    return 'project_learn_more_cresinmed';
+  }
+  // Default: use project ID
+  return `project_learn_more_${project.id}`;
+};
+
 export const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
