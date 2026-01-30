@@ -593,6 +593,32 @@ EU Contribution: €2,279,867.43 (89%)
 Learn more: https://www.interregnextmed.eu/project-page/cresinmed/about/""",
         "buttonStyle": "outline",
         "order": 1
+    },
+    # TOTEM Project Learn More button
+    {
+        "buttonId": "project_learn_more_totem",
+        "section": "projects",
+        "label": "Learn More",
+        "isVisible": True,
+        "clickAction": "show_message",
+        "clickMessage": """digiTal cOnTent Educational adMinistrator - TOTEM
+
+Edit this content in the Dashboard → Buttons section to add information about the TOTEM project.""",
+        "buttonStyle": "outline",
+        "order": 1
+    },
+    # ECHO Project Learn More button
+    {
+        "buttonId": "project_learn_more_echo",
+        "section": "projects",
+        "label": "Learn More",
+        "isVisible": True,
+        "clickAction": "show_message",
+        "clickMessage": """ENGAGING COMMUNITIES, HARMONIZING OBJECTIVES: A TWINNING JOURNEY THROUGH THE SDGS "ECHO"
+
+Edit this content in the Dashboard → Buttons section to add information about the ECHO project.""",
+        "buttonStyle": "outline",
+        "order": 1
     }
 ]
 
