@@ -560,6 +560,7 @@ This lab nurtures the next generation of social innovators and change-makers in 
 async def migrate_custom_content():
     """
     Migrate custom content only if collections are empty (first-time setup).
+    Also adds any missing buttons (upsert) to support new features.
     This preserves any data added via the dashboard.
     """
     try:
@@ -573,14 +574,6 @@ async def migrate_custom_content():
         existing_services = await services_collection.count_documents({})
         existing_projects = await projects_collection.count_documents({})
         existing_buttons = await button_configs_collection.count_documents({})
-        
-        if existing_services > 0 and existing_projects > 0 and existing_buttons > 0:
-            logger.info(f"Data already exists (Services: {existing_services}, Projects: {existing_projects}, Buttons: {existing_buttons})")
-            logger.info("Skipping migration to preserve dashboard data.")
-            logger.info("=" * 60)
-            return
-        
-        logger.info("No existing data found. Running initial content setup...")
         
         # =============================================
         # STEP 1: Populate SERVICES (only if empty)
@@ -623,18 +616,25 @@ async def migrate_custom_content():
             logger.info(f"  ✓ Updated setting: {key}")
         
         # =============================================
-        # STEP 4: Populate BUTTONS (only if empty)
+        # STEP 4: Add missing BUTTONS (upsert - safe to run)
+        # This adds new button configs without overwriting existing ones
         # =============================================
-        if existing_buttons == 0:
-            logger.info("Step 4: Migrating button configurations...")
-            for btn in BUTTON_CONFIGS:
+        logger.info("Step 4: Adding missing button configurations...")
+        buttons_added = 0
+        for btn in BUTTON_CONFIGS:
+            # Check if button already exists
+            existing = await button_configs_collection.find_one({"buttonId": btn["buttonId"]})
+            if not existing:
                 btn["createdAt"] = datetime.utcnow()
                 btn["updatedAt"] = datetime.utcnow()
                 await button_configs_collection.insert_one(btn)
-                logger.info(f"  ✓ Inserted button: {btn['buttonId']}")
-            logger.info(f"  Total buttons: {len(BUTTON_CONFIGS)}")
+                logger.info(f"  ✓ Added new button: {btn['buttonId']}")
+                buttons_added += 1
+        
+        if buttons_added > 0:
+            logger.info(f"  Added {buttons_added} new buttons")
         else:
-            logger.info(f"Step 4: Skipping buttons (already have {existing_buttons})")
+            logger.info(f"  All buttons already exist ({existing_buttons} buttons)")
         
         logger.info("=" * 60)
         logger.info("Content migration completed successfully!")
