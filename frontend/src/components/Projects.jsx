@@ -32,12 +32,21 @@ const getProjectImage = (project) => {
   return CATEGORY_DEFAULT_IMAGES[project.category] || CATEGORY_DEFAULT_IMAGES['default'];
 };
 
-// Get button ID for a project - handles special cases like CRESINMED
+// Get button ID for a project - handles special cases like CRESINMED, TOTEM, ECHO
 const getProjectButtonId = (project) => {
-  // Check for CRESINMED project by title (case-insensitive)
-  if (project.title && project.title.toLowerCase().includes('cresinmed')) {
+  const title = project.title ? project.title.toLowerCase() : '';
+  
+  // Check for special project names
+  if (title.includes('cresinmed')) {
     return 'project_learn_more_cresinmed';
   }
+  if (title.includes('totem')) {
+    return 'project_learn_more_totem';
+  }
+  if (title.includes('echo')) {
+    return 'project_learn_more_echo';
+  }
+  
   // Default: use project ID
   return `project_learn_more_${project.id}`;
 };
