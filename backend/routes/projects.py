@@ -94,6 +94,9 @@ async def create_project(project: ProjectCreate):
         result = await projects_collection.insert_one(project_obj.dict())
         
         if result.inserted_id:
+            # Auto-create a Learn More button for this project
+            await create_project_button(project_obj.id, project_obj.title)
+            
             logger.info(f"Created new project: {project_obj.title}")
             return APIResponse(
                 success=True,
