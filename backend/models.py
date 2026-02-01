@@ -175,6 +175,8 @@ class NewsArticle(BaseModel):
     content: str
     category: str = "news"  # 'news', 'update', 'announcement', 'event'
     image: Optional[str] = None
+    document: Optional[str] = None  # URL to attached PDF/Word document
+    documentName: Optional[str] = None  # Original filename for display
     author: Optional[str] = None
     isPublished: bool = True
     publishedAt: datetime = Field(default_factory=datetime.utcnow)
@@ -187,6 +189,8 @@ class NewsArticleCreate(BaseModel):
     content: str
     category: str = "news"
     image: Optional[str] = None
+    document: Optional[str] = None
+    documentName: Optional[str] = None
     author: Optional[str] = None
     isPublished: bool = True
 
@@ -196,6 +200,8 @@ class NewsArticleUpdate(BaseModel):
     content: Optional[str] = None
     category: Optional[str] = None
     image: Optional[str] = None
+    document: Optional[str] = None
+    documentName: Optional[str] = None
     author: Optional[str] = None
     isPublished: Optional[bool] = None
 
