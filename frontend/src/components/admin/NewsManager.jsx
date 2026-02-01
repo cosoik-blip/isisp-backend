@@ -439,6 +439,73 @@ export const NewsManager = ({ credentials }) => {
               </div>
             </div>
 
+            {/* Document Upload Section */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Attachment (PDF/Word)
+              </label>
+              
+              {/* Document Preview */}
+              {formData.document && (
+                <div className="mb-3 flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <FileText className="w-8 h-8 text-emerald-600" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-gray-900">{formData.documentName || 'Document'}</p>
+                    <a 
+                      href={formData.document} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-xs text-emerald-600 hover:underline"
+                    >
+                      View document
+                    </a>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({...formData, document: '', documentName: ''})}
+                    className="bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              )}
+
+              {/* Document Upload */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <input
+                    ref={docInputRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    onChange={handleDocumentUpload}
+                    className="hidden"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => docInputRef.current?.click()}
+                    disabled={uploadingDoc}
+                  >
+                    {uploadingDoc ? (
+                      <>
+                        <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-emerald-500 mr-2"></div>
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <FileText className="w-3 h-3 mr-2" />
+                        Upload Document
+                      </>
+                    )}
+                  </Button>
+                </div>
+                <p className="text-xs text-gray-500">
+                  Supported formats: PDF, Word (.doc, .docx) - Max 20MB
+                </p>
+              </div>
+            </div>
+
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
