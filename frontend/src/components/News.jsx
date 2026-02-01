@@ -134,6 +134,12 @@ export const News = () => {
                       {article.author}
                     </div>
                   )}
+                  {article.document && (
+                    <div className="flex items-center text-emerald-600 text-sm mt-2">
+                      <FileText className="w-4 h-4 mr-1" />
+                      <span>Attachment available</span>
+                    </div>
+                  )}
                   <div className="mt-4 flex items-center text-emerald-600 font-medium group">
                     Read more 
                     <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
