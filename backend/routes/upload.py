@@ -12,8 +12,13 @@ router = APIRouter(prefix="/api/upload", tags=["upload"])
 logger = logging.getLogger(__name__)
 
 # Allowed image extensions
-ALLOWED_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
-MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+ALLOWED_IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
+# Allowed document extensions
+ALLOWED_DOCUMENT_EXTENSIONS = {'.pdf', '.doc', '.docx'}
+# All allowed extensions
+ALLOWED_EXTENSIONS = ALLOWED_IMAGE_EXTENSIONS | ALLOWED_DOCUMENT_EXTENSIONS
+
+MAX_FILE_SIZE = 20 * 1024 * 1024  # 20MB for documents
 
 # Content types mapping
 CONTENT_TYPES = {
@@ -21,7 +26,10 @@ CONTENT_TYPES = {
     '.jpeg': 'image/jpeg',
     '.png': 'image/png',
     '.gif': 'image/gif',
-    '.webp': 'image/webp'
+    '.webp': 'image/webp',
+    '.pdf': 'application/pdf',
+    '.doc': 'application/msword',
+    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 }
 
 @router.post("/image")
