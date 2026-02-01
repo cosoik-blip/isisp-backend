@@ -15,6 +15,7 @@ import {
   Eye,
   EyeOff,
   Image as ImageIcon,
+  FileText,
   AlertCircle
 } from 'lucide-react';
 import axios from 'axios';
@@ -28,14 +29,18 @@ export const NewsManager = ({ credentials }) => {
   const [editingArticle, setEditingArticle] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadingDoc, setUploadingDoc] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const fileInputRef = useRef(null);
+  const docInputRef = useRef(null);
   const [formData, setFormData] = useState({
     title: '',
     summary: '',
     content: '',
     category: 'news',
     image: '',
+    document: '',
+    documentName: '',
     author: '',
     isPublished: true
   });
