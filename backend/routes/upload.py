@@ -97,6 +97,107 @@ async def upload_image(
         logger.error(f"Error uploading image: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to upload image")
 
+@router.post("/document")
+async def upload_document(
+    file: UploadFile = File(...),
+    authorization: str = Header(None)
+):
+    """Upload a document file (PDF/Word) and store it in MongoDB"""
+    try:
+        # Validate authorization (basic check)
+        if not authorization or not authorization.startswith("Basic "):
+            raise HTTPException(status_code=401, detail="Unauthorized")
+        
+        # Validate file extension
+        file_ext = Path(file.filename).suffix.lower()
+        if file_ext not in ALLOWED_DOCUMENT_EXTENSIONS:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Invalid file type. Allowed types: {', '.join(ALLOWED_DOCUMENT_EXTENSIONS)}"
+            )
+        
+        # Read file content
+        content = await file.read()
+        
+        # Check file size
+        if len(content) > MAX_FILE_SIZE:
+            raise HTTPException(
+                status_code=400,
+                detail=f"File too large. Maximum size is {MAX_FILE_SIZE // (1024*1024)}MB"
+            )
+        
+        # Generate unique filename
+        unique_id = str(uuid.uuid4())
+        unique_filename = f"{unique_id}{file_ext}"
+        
+        # Store in MongoDB
+        file_doc = {
+            "filename": unique_filename,
+            "original_filename": file.filename,
+            "content_type": CONTENT_TYPES.get(file_ext, 'application/octet-stream'),
+            "data": base64.b64encode(content).decode('utf-8'),
+            "size": len(content),
+            "file_type": "document",
+            "uploaded_at": datetime.utcnow()
+        }
+        
+        await uploaded_files_collection.insert_one(file_doc)
+        
+        # Get the backend URL from environment
+        backend_url = os.environ.get('REACT_APP_BACKEND_URL', '')
+        
+        # Return the URL to access the uploaded document
+        document_url = f"{backend_url}/api/upload/documents/{unique_filename}"
+        
+        logger.info(f"Document uploaded successfully to MongoDB: {unique_filename}")
+        
+        return {
+            "success": True,
+            "url": document_url,
+            "filename": unique_filename,
+            "originalName": file.filename
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error uploading document: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to upload document")
+
+@router.get("/documents/{filename}")
+async def get_document(filename: str):
+    """Serve an uploaded document from MongoDB"""
+    try:
+        # Sanitize filename to prevent issues
+        safe_filename = Path(filename).name
+        
+        # Find the file in MongoDB
+        file_doc = await uploaded_files_collection.find_one({"filename": safe_filename})
+        
+        if not file_doc:
+            raise HTTPException(status_code=404, detail="Document not found")
+        
+        # Decode the base64 data
+        content = base64.b64decode(file_doc["data"])
+        
+        # Use original filename for download
+        original_name = file_doc.get("original_filename", safe_filename)
+        
+        return Response(
+            content=content,
+            media_type=file_doc["content_type"],
+            headers={
+                "Content-Disposition": f"attachment; filename={original_name}",
+                "Cache-Control": "public, max-age=31536000"
+            }
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error serving document {filename}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to serve document")
+
 @router.get("/images/{filename}")
 async def get_image(filename: str):
     """Serve an uploaded image from MongoDB"""
