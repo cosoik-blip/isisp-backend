@@ -45,10 +45,10 @@ async def upload_image(
         
         # Validate file extension
         file_ext = Path(file.filename).suffix.lower()
-        if file_ext not in ALLOWED_EXTENSIONS:
+        if file_ext not in ALLOWED_IMAGE_EXTENSIONS:
             raise HTTPException(
                 status_code=400, 
-                detail=f"Invalid file type. Allowed types: {', '.join(ALLOWED_EXTENSIONS)}"
+                detail=f"Invalid file type. Allowed types: {', '.join(ALLOWED_IMAGE_EXTENSIONS)}"
             )
         
         # Read file content
