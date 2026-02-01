@@ -199,6 +199,34 @@ export const News = () => {
                 <div className="prose prose-emerald max-w-none">
                   <p className="text-gray-600 whitespace-pre-line">{selectedArticle.content}</p>
                 </div>
+                
+                {/* Document Download */}
+                {selectedArticle.document && (
+                  <div className="mt-6 p-4 bg-emerald-50 rounded-lg border border-emerald-100">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <FileText className="w-8 h-8 text-emerald-600" />
+                        <div>
+                          <p className="font-medium text-gray-900">
+                            {selectedArticle.documentName || 'Attached Document'}
+                          </p>
+                          <p className="text-sm text-gray-500">Click to download</p>
+                        </div>
+                      </div>
+                      <a
+                        href={selectedArticle.document}
+                        download
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Download
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="p-4 border-t bg-gray-50">
                 <button
