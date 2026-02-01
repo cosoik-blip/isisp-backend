@@ -218,6 +218,58 @@ export const NewsManager = ({ credentials }) => {
     }
   };
 
+  const handleDocumentUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+    if (!allowedTypes.includes(file.type)) {
+      setUploadError('Invalid file type. Please upload PDF or Word document.');
+      return;
+    }
+
+    // Validate file size (20MB max)
+    if (file.size > 20 * 1024 * 1024) {
+      setUploadError('File too large. Maximum size is 20MB.');
+      return;
+    }
+
+    setUploadingDoc(true);
+    setUploadError('');
+
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
+
+      const response = await fetch(`${API}/upload/document`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Basic ${authToken}`
+        },
+        body: uploadFormData
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFormData(prev => ({ 
+          ...prev, 
+          document: data.url,
+          documentName: data.originalName || file.name
+        }));
+        setUploadError('');
+      } else {
+        const error = await response.json();
+        setUploadError(error.detail || 'Failed to upload document');
+      }
+    } catch (error) {
+      console.error('Error uploading document:', error);
+      setUploadError('Failed to upload document. Please try again.');
+    } finally {
+      setUploadingDoc(false);
+    }
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
