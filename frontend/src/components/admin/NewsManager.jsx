@@ -135,6 +135,8 @@ export const NewsManager = ({ credentials }) => {
       content: article.content,
       category: article.category,
       image: article.image || '',
+      document: article.document || '',
+      documentName: article.documentName || '',
       author: article.author || '',
       isPublished: article.isPublished
     });
@@ -154,6 +156,8 @@ export const NewsManager = ({ credentials }) => {
       content: '',
       category: 'news',
       image: '',
+      document: '',
+      documentName: '',
       author: '',
       isPublished: true
     });
