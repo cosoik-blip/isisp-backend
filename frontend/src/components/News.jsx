@@ -161,11 +161,11 @@ export const News = () => {
               onClick={(e) => e.stopPropagation()}
             >
               {selectedArticle.image && (
-                <div className="h-64 overflow-hidden">
+                <div className="h-64 overflow-hidden bg-gray-100 flex items-center justify-center">
                   <img 
                     src={selectedArticle.image} 
                     alt={selectedArticle.title}
-                    className="w-full h-full object-cover"
+                    className="max-w-full max-h-full object-contain"
                   />
                 </div>
               )}
