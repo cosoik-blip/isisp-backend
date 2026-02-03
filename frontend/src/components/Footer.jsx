@@ -5,6 +5,8 @@ import {
   Phone, 
   MapPin, 
   Facebook, 
+  Instagram,
+  Linkedin,
   ArrowRight,
   Heart,
   X,
