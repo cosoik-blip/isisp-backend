@@ -53,6 +53,24 @@ export const Footer = () => {
               >
                 <Facebook className="w-5 h-5" />
               </a>
+              <a 
+                href="https://www.instagram.com/3tsnpo/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 transition-all duration-300 hover:text-pink-500 hover:scale-110"
+                data-testid="social-instagram"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a 
+                href="https://www.linkedin.com/in/three-thirds-society-npo-180b65278/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 transition-all duration-300 hover:text-blue-600 hover:scale-110"
+                data-testid="social-linkedin"
+              >
+                <Linkedin className="w-5 h-5" />
+              </a>
             </div>
           </div>
 
