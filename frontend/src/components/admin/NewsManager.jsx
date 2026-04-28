@@ -39,8 +39,7 @@ export const NewsManager = ({ credentials }) => {
     content: '',
     category: 'news',
     image: '',
-    document: '',
-    documentName: '',
+    documents: [],
     author: '',
     isPublished: true
   });
@@ -69,9 +68,15 @@ export const NewsManager = ({ credentials }) => {
     }
   };
 
+  const buildPayload = () => ({
+    ...formData,
+    document: null,
+    documentName: null
+  });
+
   const handleCreate = async () => {
     try {
-      const response = await axios.post(`${API}/admin/news`, formData, authHeader);
+      const response = await axios.post(`${API}/admin/news`, buildPayload(), authHeader);
       if (response.data.success) {
         fetchArticles();
         setIsCreating(false);
@@ -86,7 +91,7 @@ export const NewsManager = ({ credentials }) => {
     try {
       const response = await axios.put(
         `${API}/admin/news/${editingArticle.id}`,
-        formData,
+        buildPayload(),
         authHeader
       );
       if (response.data.success) {
@@ -128,6 +133,11 @@ export const NewsManager = ({ credentials }) => {
   };
 
   const startEdit = (article) => {
+    // Build documents array, merging legacy single-document field if present
+    let docs = Array.isArray(article.documents) ? [...article.documents] : [];
+    if (article.document && !docs.some(d => d.url === article.document)) {
+      docs.unshift({ url: article.document, name: article.documentName || 'Document' });
+    }
     setEditingArticle(article);
     setFormData({
       title: article.title,
@@ -135,8 +145,7 @@ export const NewsManager = ({ credentials }) => {
       content: article.content,
       category: article.category,
       image: article.image || '',
-      document: article.document || '',
-      documentName: article.documentName || '',
+      documents: docs,
       author: article.author || '',
       isPublished: article.isPublished
     });
@@ -156,8 +165,7 @@ export const NewsManager = ({ credentials }) => {
       content: '',
       category: 'news',
       image: '',
-      document: '',
-      documentName: '',
+      documents: [],
       author: '',
       isPublished: true
     });
@@ -219,55 +227,73 @@ export const NewsManager = ({ credentials }) => {
   };
 
   const handleDocumentUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
 
-    // Validate file type
     const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-    if (!allowedTypes.includes(file.type)) {
-      setUploadError('Invalid file type. Please upload PDF or Word document.');
-      return;
-    }
-
-    // Validate file size (20MB max)
-    if (file.size > 20 * 1024 * 1024) {
-      setUploadError('File too large. Maximum size is 20MB.');
-      return;
-    }
+    const allowedExts = ['.pdf', '.doc', '.docx'];
+    const MAX_SIZE = 20 * 1024 * 1024;
 
     setUploadingDoc(true);
     setUploadError('');
 
-    try {
-      const uploadFormData = new FormData();
-      uploadFormData.append('file', file);
+    const uploaded = [];
+    const errors = [];
 
-      const response = await fetch(`${API}/upload/document`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Basic ${authToken}`
-        },
-        body: uploadFormData
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setFormData(prev => ({ 
-          ...prev, 
-          document: data.url,
-          documentName: data.originalName || file.name
-        }));
-        setUploadError('');
-      } else {
-        const error = await response.json();
-        setUploadError(error.detail || 'Failed to upload document');
+    for (const file of files) {
+      const lowerName = file.name.toLowerCase();
+      const isAllowed = allowedTypes.includes(file.type) || allowedExts.some(ext => lowerName.endsWith(ext));
+      if (!isAllowed) {
+        errors.push(`${file.name}: invalid type`);
+        continue;
       }
-    } catch (error) {
-      console.error('Error uploading document:', error);
-      setUploadError('Failed to upload document. Please try again.');
-    } finally {
-      setUploadingDoc(false);
+      if (file.size > MAX_SIZE) {
+        errors.push(`${file.name}: exceeds 20MB`);
+        continue;
+      }
+
+      try {
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', file);
+
+        const response = await fetch(`${API}/upload/document`, {
+          method: 'POST',
+          headers: { 'Authorization': `Basic ${authToken}` },
+          body: uploadFormData
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          uploaded.push({ url: data.url, name: data.originalName || file.name });
+        } else {
+          const error = await response.json().catch(() => ({}));
+          errors.push(`${file.name}: ${error.detail || 'upload failed'}`);
+        }
+      } catch (err) {
+        console.error('Error uploading document:', err);
+        errors.push(`${file.name}: network error`);
+      }
     }
+
+    if (uploaded.length > 0) {
+      setFormData(prev => ({
+        ...prev,
+        documents: [...(prev.documents || []), ...uploaded]
+      }));
+    }
+
+    setUploadError(errors.length > 0 ? errors.join('; ') : '');
+    setUploadingDoc(false);
+
+    // Reset input so the same file can be re-selected if needed
+    if (docInputRef.current) docInputRef.current.value = '';
+  };
+
+  const removeDocument = (idx) => {
+    setFormData(prev => ({
+      ...prev,
+      documents: (prev.documents || []).filter((_, i) => i !== idx)
+    }));
   };
 
   const formatDate = (dateString) => {
@@ -442,31 +468,41 @@ export const NewsManager = ({ credentials }) => {
             {/* Document Upload Section */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Attachment (PDF/Word)
+                Attachments (PDF/Word) — multiple files supported
               </label>
-              
-              {/* Document Preview */}
-              {formData.document && (
-                <div className="mb-3 flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                  <FileText className="w-8 h-8 text-emerald-600" />
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">{formData.documentName || 'Document'}</p>
-                    <a 
-                      href={formData.document} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-xs text-emerald-600 hover:underline"
+
+              {/* Documents List */}
+              {formData.documents && formData.documents.length > 0 && (
+                <div className="mb-3 space-y-2">
+                  {formData.documents.map((doc, idx) => (
+                    <div
+                      key={`${doc.url}-${idx}`}
+                      data-testid={`news-doc-item-${idx}`}
+                      className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-200"
                     >
-                      View document
-                    </a>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setFormData({...formData, document: '', documentName: ''})}
-                    className="bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
+                      <FileText className="w-6 h-6 text-emerald-600 flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 truncate">{doc.name || 'Document'}</p>
+                        <a
+                          href={doc.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-emerald-600 hover:underline"
+                        >
+                          View document
+                        </a>
+                      </div>
+                      <button
+                        type="button"
+                        data-testid={`news-doc-remove-${idx}`}
+                        onClick={() => removeDocument(idx)}
+                        className="bg-red-500 text-white rounded-full p-1 hover:bg-red-600 flex-shrink-0"
+                        aria-label="Remove document"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
                 </div>
               )}
 
@@ -476,9 +512,11 @@ export const NewsManager = ({ credentials }) => {
                   <input
                     ref={docInputRef}
                     type="file"
+                    multiple
                     accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     onChange={handleDocumentUpload}
                     className="hidden"
+                    data-testid="news-doc-upload-input"
                   />
                   <Button
                     type="button"
@@ -486,6 +524,7 @@ export const NewsManager = ({ credentials }) => {
                     size="sm"
                     onClick={() => docInputRef.current?.click()}
                     disabled={uploadingDoc}
+                    data-testid="news-doc-upload-btn"
                   >
                     {uploadingDoc ? (
                       <>
@@ -495,13 +534,13 @@ export const NewsManager = ({ credentials }) => {
                     ) : (
                       <>
                         <FileText className="w-3 h-3 mr-2" />
-                        Upload Document
+                        Upload Document(s)
                       </>
                     )}
                   </Button>
                 </div>
                 <p className="text-xs text-gray-500">
-                  Supported formats: PDF, Word (.doc, .docx) - Max 20MB
+                  Supported formats: PDF, Word (.doc, .docx) — Max 20MB per file. You can select multiple files at once or upload more in additional batches.
                 </p>
               </div>
             </div>

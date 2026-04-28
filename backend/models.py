@@ -168,6 +168,10 @@ class ButtonConfigUpdate(BaseModel):
     order: Optional[int] = None
 
 # News & Updates Models
+class NewsAttachment(BaseModel):
+    url: str
+    name: str
+
 class NewsArticle(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: str
@@ -175,8 +179,9 @@ class NewsArticle(BaseModel):
     content: str
     category: str = "news"  # 'news', 'update', 'announcement', 'event'
     image: Optional[str] = None
-    document: Optional[str] = None  # URL to attached PDF/Word document
-    documentName: Optional[str] = None  # Original filename for display
+    document: Optional[str] = None  # Legacy: URL to first attached document
+    documentName: Optional[str] = None  # Legacy: filename for display
+    documents: Optional[List[NewsAttachment]] = None  # List of attachments
     author: Optional[str] = None
     isPublished: bool = True
     publishedAt: datetime = Field(default_factory=datetime.utcnow)
@@ -191,6 +196,7 @@ class NewsArticleCreate(BaseModel):
     image: Optional[str] = None
     document: Optional[str] = None
     documentName: Optional[str] = None
+    documents: Optional[List[NewsAttachment]] = None
     author: Optional[str] = None
     isPublished: bool = True
 
@@ -202,6 +208,7 @@ class NewsArticleUpdate(BaseModel):
     image: Optional[str] = None
     document: Optional[str] = None
     documentName: Optional[str] = None
+    documents: Optional[List[NewsAttachment]] = None
     author: Optional[str] = None
     isPublished: Optional[bool] = None
 

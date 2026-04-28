@@ -1,0 +1,126 @@
+<analysis>**original_problem_statement:**
+The user wants to build a modern, professional website with a full-featured admin dashboard for their social economy organization, Three Thirds Society (3ts.gr). PRODUCT REQUIREMENTS include sections for Services, Projects, News & Updates, Settings, and a dynamic button management system. A critical requirement is ensuring all content created or modified in the admin dashboard seamlessly transfers to the live production website upon redeployment, and that user-uploaded media (images/documents) persists permanently.
+
+**User's preferred language**: English
+*(INSTRUCTION: Next agent MUST respond in English)*
+
+**what currently exists?** 
+A full-stack application (React frontend + FastAPI/MongoDB backend). The public site dynamically loads content (Hero, Services, Projects, News, Contact). A complete CMS exists at . The app features a custom content migration script () that syncs initial DB states safely, an SMTP-based contact form, and GridFS integration for persistent media/document uploads. Admin credentials have been secured in .
+
+**Last working item**:
+- Last item agent was working: Adding Instagram and LinkedIn social icons next to the Facebook icon in the website footer (). 
+- Status: USER VERIFICATION PENDING
+- Agent Testing Done: Y
+- Which testing method agent to use?: screenshot tool
+- User Testing Done: N
+
+**All Pending/In progress Issue list**:
+*No critical blocking issues are currently in progress. However, user verification is pending for the live deployment.*
+
+**In progress Task List**:
+*None. All active tasks were completed.*
+
+**Upcoming and Future Tasks**
+- Task 1: (P1) Implement Video Embedding
+  - Next Step: The user previously inquired about embedding a video. Confirm if they still want this and add a video player component to the target section.
+- Task 2: (P2) Run comprehensive backend tests
+  - Next Step: The automated testing agent () was not utilized after significant architectural changes (GridFS file uploads, new endpoints). This must be run to ensure API robustness.
+- Task 3: (P3) Add multiple admin user accounts
+  - Next Step: Currently, there is a single admin account secured via . Implement a multi-user admin schema if the user requests it.
+
+**Completed work in this session**
+- Fixed content migration script () to properly  and skip destructive  operations, preserving production data.
+- Transitioned media uploads to **MongoDB GridFS** () because local container storage is ephemeral and gets wiped on redeployment. 
+- Implemented category-based default placeholder images for projects.
+- Replaced View Project Details with customizable, dynamic Learn More popup buttons for all projects.
+- Built automatic background creation of dynamic button configs when new projects are added ().
+- Fixed dashboard UI bug where the Edit Button form didn't scroll into view.
+- Added PDF/Word document upload and download functionality to the News section.
+- Fixed UI bug in News where project logos were cropped by changing CSS  to .
+- Moved hardcoded Admin Credentials to backend .
+- Updated site-wide contact phone number and added LinkedIn/Instagram footer links.
+
+**Earlier issues found/mentioned but not fixed**
+*None. All reported bugs were successfully addressed.*
+
+**Known issue recurrence from previous fork**
+- Issue recurrence in previous fork: Data loss during redeployment.
+- Recurrence count: 2 (First services didn't sync, then CRESINMED project was deleted on restart).
+- Status: RESOLVED (Fixed by making  safe/idempotent and using GridFS for persistent uploads).
+
+**Code Architecture**
+
+
+**Key Technical Concepts**
+- Frontend: React, Tailwind, Shadcn UI
+- Backend: FastAPI, Pydantic
+- Database: MongoDB (Motor async driver)
+- Architecture/Storage: **MongoDB GridFS** is utilized for storing all user uploads (images, PDFs, DOCs) to ensure data persists across container redeployments.
+- Dynamic Component Rendering: React Portals used for  popups. 
+
+**key DB schema**
+- projects: {id, title, category, shortDescription, region, year, impact, image_url, image_id}
+- news: {id, title, description, impact, date, author, category, image_url, image_id, document_url, document_id, document_name}
+- buttons: {id, buttonId, section, buttonText, clickAction, clickMessage, buttonStyle}
+
+**changes in tech stack**
+- Added  and integrated MongoDB  for handling binary file uploads. 
+
+**All files of reference**
+- : Created to handle GridFS streams for images and documents.
+- : Refactored to safeguard existing DB data instead of overwriting it on every deployment startup.
+- : Updated so a linked  entity is auto-generated whenever a new  is created.
+-  & : Updated to support multipart/form-data uploads.
+- : Updated with new social media links.
+- : Stores , , , .
+
+**Areas that need refactoring**: 
+- Backend endpoints currently lack comprehensive unit/integration tests. 
+
+**key api endpoints**
+- : Uploads images to GridFS.
+- : Uploads PDFs/DOCs to GridFS.
+- : Serves GridFS files.
+- : Creates a project and its associated dynamic button.
+
+**Critical Info for New Agent**
+- **Ephemeral Storage Warning:** NEVER use the local filesystem () for storing user uploads. Containers are wiped on redeployment. Always use MongoDB GridFS () for file persistence.
+- **Admin Credentials:** Have been securely moved to the backend  file as  and . Do not hardcode them again.
+- **Dynamic Buttons Engine:** Projects now have auto-generated popups. When a project is created via , a corresponding button with ID  is automatically injected into the  collection.
+
+**documents and test reports created in this job**
+- 
+
+**Last 10 User Messages and any pending HUMAN messages**
+1. User: Asked why Learn More button wasn't showing on live site. (Agent explained redeployment is needed).
+2. User: Edit button in admin dashboard for Learn More doesn't work. (Agent fixed form scroll visibility).
+3. User: Learn More button missing for specific projects (TOTEM and ECHO). (Agent explained they lack configs, manually added them to migration script).
+4. User: Requested PDF/Word upload functionality in News dashboard. (Agent implemented via GridFS and updated UI).
+5. User: Reported CRESINMED logo is cropped in News and Read More modal. (Agent fixed CSS  to ).
+6. User: Requested Instagram and LinkedIn links added to Footer next to Facebook. (Agent implemented, awaiting user verification via redeployment).
+
+*Pending Human Message:* None. User needs to redeploy to verify all the accumulated features on the live domain.
+
+**Project Health Check:**
+- Broken: None.
+- Mocked: None.
+
+**3rd Party Integrations**
+- dnhost SMTP (User provided via )
+
+**Testing status**
+- Testing agent used after significant changes: NO (Crucial omission by the previous agent given the architectural changes to file storage).
+- Troubleshoot agent used after agent stuck in loop: NO
+- Test files created: None
+- Known regressions: None
+
+**Credentials to test flow:**
+- Admin Dashboard URL: 
+- Username:  (or via )
+- Password:  (or via )
+
+**What agent forgot to execute**
+- The agent successfully implemented large features (GridFS file uploads, new schemas, auto-creating buttons on API triggers) but **failed to run the **. This leaves the backend APIs exposed to potential edge-case errors.
+
+**Debugging checklist for current issue**
+N/A - Current task is complete, but  should be run on the backend to guarantee stability for the  and  routes.</analysis>
