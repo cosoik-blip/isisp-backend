@@ -7,6 +7,60 @@ import axios from 'axios';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
+// Render text with support for markdown-style links [text](url) and bare URLs.
+// Returns an array of React nodes; preserves the original line breaks via whitespace-pre-line.
+const renderRichText = (text) => {
+  if (!text) return null;
+  const nodes = [];
+  // Combined regex: markdown link OR bare URL (http(s)/www)
+  const pattern = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+|www\.[^\s<]+)/g;
+  let lastIndex = 0;
+  let match;
+  let key = 0;
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push(text.slice(lastIndex, match.index));
+    }
+    if (match[1] && match[2]) {
+      // Markdown link: [text](url)
+      nodes.push(
+        <a
+          key={`lnk-${key++}`}
+          href={match[2]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-emerald-600 hover:text-emerald-700 underline break-words"
+        >
+          {match[1]}
+        </a>
+      );
+    } else if (match[3]) {
+      // Bare URL
+      const raw = match[3];
+      // Strip trailing punctuation that's almost certainly not part of the URL
+      const trailingMatch = raw.match(/[).,;!?]+$/);
+      const trailing = trailingMatch ? trailingMatch[0] : '';
+      const url = trailing ? raw.slice(0, -trailing.length) : raw;
+      const href = url.startsWith('www.') ? `https://${url}` : url;
+      nodes.push(
+        <a
+          key={`url-${key++}`}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-emerald-600 hover:text-emerald-700 underline break-words"
+        >
+          {url}
+        </a>
+      );
+      if (trailing) nodes.push(trailing);
+    }
+    lastIndex = pattern.lastIndex;
+  }
+  if (lastIndex < text.length) nodes.push(text.slice(lastIndex));
+  return nodes;
+};
+
 export const News = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -202,7 +256,9 @@ export const News = () => {
                   )}
                 </div>
                 <div className="prose prose-emerald max-w-none">
-                  <p className="text-gray-600 whitespace-pre-line">{selectedArticle.content}</p>
+                  <p className="text-gray-600 whitespace-pre-line break-words">
+                    {renderRichText(selectedArticle.content)}
+                  </p>
                 </div>
                 
                 {/* Document Downloads */}

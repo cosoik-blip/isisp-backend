@@ -384,6 +384,9 @@ export const NewsManager = ({ credentials }) => {
                 placeholder="Full article content"
                 rows={6}
               />
+              <p className="text-xs text-gray-500 mt-1">
+                Tip: paste a URL like <code className="px-1 bg-gray-100 rounded">https://example.com</code> and it will become clickable. To use custom link text, type <code className="px-1 bg-gray-100 rounded">[click here](https://example.com)</code>.
+              </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">
