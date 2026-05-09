@@ -205,7 +205,7 @@ async def get_document(filename: str):
             media_type=file_doc["content_type"],
             headers={
                 "Content-Disposition": _content_disposition(original_name, "attachment"),
-                "Cache-Control": "public, max-age=31536000"
+                "Cache-Control": "public, max-age=3600"
             }
         )
         
@@ -235,7 +235,7 @@ async def get_image(filename: str):
             content=content,
             media_type=file_doc["content_type"],
             headers={
-                "Cache-Control": "public, max-age=31536000",
+                "Cache-Control": "public, max-age=3600",
                 "Content-Disposition": _content_disposition(safe_filename, "inline")
             }
         )
