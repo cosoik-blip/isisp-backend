@@ -5,11 +5,28 @@ import uuid
 import logging
 from pathlib import Path
 from datetime import datetime
+from urllib.parse import quote
 from database import uploaded_files_collection
 import base64
 
 router = APIRouter(prefix="/api/upload", tags=["upload"])
 logger = logging.getLogger(__name__)
+
+
+def _content_disposition(filename: str, disposition: str = "attachment") -> str:
+    """Build a Content-Disposition header that safely supports non-ASCII filenames (RFC 5987)."""
+    if not filename:
+        filename = "file"
+    try:
+        filename.encode("ascii")
+        # Pure ASCII - quote any double quotes and use the simple form
+        safe = filename.replace('"', '')
+        return f'{disposition}; filename="{safe}"'
+    except UnicodeEncodeError:
+        # Non-ASCII (e.g. Greek): provide an ASCII fallback + RFC 5987 encoded version
+        ascii_fallback = filename.encode("ascii", "ignore").decode("ascii") or "file"
+        encoded = quote(filename, safe="")
+        return f"{disposition}; filename=\"{ascii_fallback}\"; filename*=UTF-8''{encoded}"
 
 # Allowed image extensions
 ALLOWED_IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
@@ -187,7 +204,7 @@ async def get_document(filename: str):
             content=content,
             media_type=file_doc["content_type"],
             headers={
-                "Content-Disposition": f"attachment; filename={original_name}",
+                "Content-Disposition": _content_disposition(original_name, "attachment"),
                 "Cache-Control": "public, max-age=31536000"
             }
         )
@@ -219,7 +236,7 @@ async def get_image(filename: str):
             media_type=file_doc["content_type"],
             headers={
                 "Cache-Control": "public, max-age=31536000",
-                "Content-Disposition": f"inline; filename={safe_filename}"
+                "Content-Disposition": _content_disposition(safe_filename, "inline")
             }
         )
         
