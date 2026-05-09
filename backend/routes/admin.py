@@ -18,6 +18,11 @@ from database import (
     button_configs_collection,
     news_collection
 )
+from file_cleanup import (
+    collect_news_file_urls,
+    extract_internal_filenames,
+    delete_orphan_files,
+)
 from datetime import datetime
 import logging
 import secrets
@@ -486,26 +491,42 @@ async def create_news_admin(article: NewsArticleCreate, admin_user: str = Depend
 
 @router.put("/news/{article_id}", response_model=APIResponse)
 async def update_news_admin(article_id: str, article_update: NewsArticleUpdate, admin_user: str = Depends(authenticate_admin)):
-    """Update a news article"""
+    """Update a news article and clean up any attachments that were removed."""
     try:
-        update_data = {k: v for k, v in article_update.dict().items() if v is not None}
-        
+        # Use exclude_unset so explicit None values (e.g. clearing the legacy
+        # `document` field) actually persist instead of being filtered out.
+        update_data = article_update.dict(exclude_unset=True)
+
         if not update_data:
             raise HTTPException(status_code=400, detail="No valid fields to update")
-        
+
+        # Snapshot the article BEFORE the update so we know which uploaded files
+        # it used to reference.
+        old_article = await news_collection.find_one({"id": article_id})
+        if not old_article:
+            raise HTTPException(status_code=404, detail="Article not found")
+
         update_data["updatedAt"] = datetime.utcnow()
-        
+
         result = await news_collection.update_one(
             {"id": article_id},
             {"$set": update_data}
         )
-        
+
         if result.matched_count == 0:
             raise HTTPException(status_code=404, detail="Article not found")
-        
+
+        # Diff old vs new file URLs and orphan-clean anything no longer referenced.
+        new_article = await news_collection.find_one({"id": article_id})
+        old_files = extract_internal_filenames(collect_news_file_urls(old_article))
+        new_files = extract_internal_filenames(collect_news_file_urls(new_article))
+        removed = old_files - new_files
+        if removed:
+            await delete_orphan_files(removed, exclude_news_id=article_id)
+
         logger.info(f"Admin {admin_user} updated news {article_id}")
         return APIResponse(success=True, message="Article updated successfully")
-        
+
     except HTTPException:
         raise
     except Exception as e:
@@ -514,16 +535,26 @@ async def update_news_admin(article_id: str, article_update: NewsArticleUpdate, 
 
 @router.delete("/news/{article_id}", response_model=APIResponse)
 async def delete_news_admin(article_id: str, admin_user: str = Depends(authenticate_admin)):
-    """Delete a news article"""
+    """Delete a news article and any uploaded attachments it owned."""
     try:
+        # Capture the article first so we know which files to clean up.
+        article = await news_collection.find_one({"id": article_id})
+        if not article:
+            raise HTTPException(status_code=404, detail="Article not found")
+
         result = await news_collection.delete_one({"id": article_id})
-        
+
         if result.deleted_count == 0:
             raise HTTPException(status_code=404, detail="Article not found")
-        
+
+        # Best-effort cleanup of attachments that nothing else references.
+        files = extract_internal_filenames(collect_news_file_urls(article))
+        if files:
+            await delete_orphan_files(files, exclude_news_id=article_id)
+
         logger.info(f"Admin {admin_user} deleted news {article_id}")
         return APIResponse(success=True, message="Article deleted successfully")
-        
+
     except HTTPException:
         raise
     except Exception as e:
