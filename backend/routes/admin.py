@@ -20,6 +20,7 @@ from database import (
 )
 from file_cleanup import (
     collect_news_file_urls,
+    collect_project_file_urls,
     extract_internal_filenames,
     delete_orphan_files,
 )
@@ -215,26 +216,39 @@ async def create_project_admin(project: ProjectCreate, admin_user: str = Depends
 
 @router.put("/projects/{project_id}", response_model=APIResponse)
 async def update_project_admin(project_id: str, project_update: ProjectUpdate, admin_user: str = Depends(authenticate_admin)):
-    """Update a project"""
+    """Update a project and clean up the previous image if it was replaced."""
     try:
-        update_data = {k: v for k, v in project_update.dict().items() if v is not None}
-        
+        update_data = project_update.dict(exclude_unset=True)
+
         if not update_data:
             raise HTTPException(status_code=400, detail="No valid fields to update")
-        
+
+        # Snapshot the project before update so we can detect a replaced image.
+        old_project = await projects_collection.find_one({"id": project_id})
+        if not old_project:
+            raise HTTPException(status_code=404, detail="Project not found")
+
         update_data["updatedAt"] = datetime.utcnow()
-        
+
         result = await projects_collection.update_one(
             {"id": project_id},
             {"$set": update_data}
         )
-        
+
         if result.matched_count == 0:
             raise HTTPException(status_code=404, detail="Project not found")
-        
+
+        # If the image changed, the previous file may now be an orphan.
+        new_project = await projects_collection.find_one({"id": project_id})
+        old_files = extract_internal_filenames(collect_project_file_urls(old_project))
+        new_files = extract_internal_filenames(collect_project_file_urls(new_project))
+        removed = old_files - new_files
+        if removed:
+            await delete_orphan_files(removed, exclude_project_id=project_id)
+
         logger.info(f"Admin {admin_user} updated project {project_id}")
         return APIResponse(success=True, message="Project updated successfully")
-        
+
     except HTTPException:
         raise
     except Exception as e:

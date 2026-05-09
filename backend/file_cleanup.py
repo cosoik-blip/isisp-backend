@@ -49,8 +49,19 @@ def collect_news_file_urls(article: Optional[dict]) -> List[str]:
     return urls
 
 
-async def _is_referenced_elsewhere(filename: str, exclude_news_id: Optional[str] = None) -> bool:
-    """Return True if any news article (other than exclude_news_id) or any project
+def collect_project_file_urls(project: Optional[dict]) -> List[str]:
+    """Collect every file URL referenced by a project document."""
+    if not project:
+        return []
+    return [project["image"]] if project.get("image") else []
+
+
+async def _is_referenced_elsewhere(
+    filename: str,
+    exclude_news_id: Optional[str] = None,
+    exclude_project_id: Optional[str] = None,
+) -> bool:
+    """Return True if any news article or project (other than the excluded ones)
     still references the given uploaded filename.
     """
     pattern = {"$regex": re.escape(filename) + "(?:[?#].*)?$"}
@@ -68,13 +79,21 @@ async def _is_referenced_elsewhere(filename: str, exclude_news_id: Optional[str]
     if await news_collection.find_one(news_query, {"_id": 1}):
         return True
 
-    if await projects_collection.find_one({"image": pattern}, {"_id": 1}):
+    proj_query: dict = {"image": pattern}
+    if exclude_project_id:
+        proj_query = {"$and": [proj_query, {"id": {"$ne": exclude_project_id}}]}
+
+    if await projects_collection.find_one(proj_query, {"_id": 1}):
         return True
 
     return False
 
 
-async def delete_orphan_files(filenames: Iterable[str], exclude_news_id: Optional[str] = None) -> int:
+async def delete_orphan_files(
+    filenames: Iterable[str],
+    exclude_news_id: Optional[str] = None,
+    exclude_project_id: Optional[str] = None,
+) -> int:
     """Delete uploaded_files docs that are no longer referenced anywhere.
     Each delete is best-effort: failures are logged but do not raise.
     Returns the number of files actually removed.
@@ -82,7 +101,11 @@ async def delete_orphan_files(filenames: Iterable[str], exclude_news_id: Optiona
     removed = 0
     for fn in set(filenames or []):
         try:
-            if await _is_referenced_elsewhere(fn, exclude_news_id=exclude_news_id):
+            if await _is_referenced_elsewhere(
+                fn,
+                exclude_news_id=exclude_news_id,
+                exclude_project_id=exclude_project_id,
+            ):
                 continue
             result = await uploaded_files_collection.delete_one({"filename": fn})
             if result.deleted_count:
