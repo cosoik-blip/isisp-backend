@@ -230,8 +230,14 @@ export const NewsManager = ({ credentials }) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
-    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-    const allowedExts = ['.pdf', '.doc', '.docx'];
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ];
+    const allowedExts = ['.pdf', '.doc', '.docx', '.xls', '.xlsx'];
     const MAX_SIZE = 20 * 1024 * 1024;
 
     setUploadingDoc(true);
@@ -471,7 +477,7 @@ export const NewsManager = ({ credentials }) => {
             {/* Document Upload Section */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Attachments (PDF/Word) — multiple files supported
+                Attachments (PDF / Word / Excel) — multiple files supported
               </label>
 
               {/* Documents List */}
@@ -516,7 +522,7 @@ export const NewsManager = ({ credentials }) => {
                     ref={docInputRef}
                     type="file"
                     multiple
-                    accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    accept=".pdf,.doc,.docx,.xls,.xlsx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     onChange={handleDocumentUpload}
                     className="hidden"
                     data-testid="news-doc-upload-input"
@@ -543,7 +549,7 @@ export const NewsManager = ({ credentials }) => {
                   </Button>
                 </div>
                 <p className="text-xs text-gray-500">
-                  Supported formats: PDF, Word (.doc, .docx) — Max 20MB per file. You can select multiple files at once or upload more in additional batches.
+                  Supported formats: PDF, Word (.doc, .docx), Excel (.xls, .xlsx) — Max 20MB per file. You can select multiple files at once or upload more in additional batches.
                 </p>
               </div>
             </div>

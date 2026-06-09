@@ -31,7 +31,7 @@ def _content_disposition(filename: str, disposition: str = "attachment") -> str:
 # Allowed image extensions
 ALLOWED_IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
 # Allowed document extensions
-ALLOWED_DOCUMENT_EXTENSIONS = {'.pdf', '.doc', '.docx'}
+ALLOWED_DOCUMENT_EXTENSIONS = {'.pdf', '.doc', '.docx', '.xls', '.xlsx'}
 # All allowed extensions
 ALLOWED_EXTENSIONS = ALLOWED_IMAGE_EXTENSIONS | ALLOWED_DOCUMENT_EXTENSIONS
 
@@ -46,7 +46,9 @@ CONTENT_TYPES = {
     '.webp': 'image/webp',
     '.pdf': 'application/pdf',
     '.doc': 'application/msword',
-    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    '.xls': 'application/vnd.ms-excel',
+    '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 }
 
 @router.post("/image")
