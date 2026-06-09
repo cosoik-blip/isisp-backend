@@ -61,6 +61,24 @@ const renderRichText = (text) => {
   return nodes;
 };
 
+// Map an attachment URL/filename to a typed badge (label + color + accent classes).
+const getFileBadge = (urlOrName) => {
+  const s = (urlOrName || '').toLowerCase().split(/[?#]/)[0];
+  const ext = s.slice(s.lastIndexOf('.') + 1);
+  switch (ext) {
+    case 'pdf':
+      return { label: 'PDF', badge: 'bg-red-100 text-red-700 border-red-200', icon: 'bg-red-600' };
+    case 'doc':
+    case 'docx':
+      return { label: 'DOC', badge: 'bg-blue-100 text-blue-700 border-blue-200', icon: 'bg-blue-600' };
+    case 'xls':
+    case 'xlsx':
+      return { label: 'XLS', badge: 'bg-green-100 text-green-700 border-green-200', icon: 'bg-green-600' };
+    default:
+      return { label: 'FILE', badge: 'bg-gray-100 text-gray-700 border-gray-200', icon: 'bg-gray-600' };
+  }
+};
+
 export const News = () => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -273,35 +291,48 @@ export const News = () => {
                       <h3 className="text-sm font-semibold text-gray-700">
                         {docs.length > 1 ? 'Attachments' : 'Attachment'}
                       </h3>
-                      {docs.map((doc, idx) => (
-                        <div
-                          key={`${doc.url}-${idx}`}
-                          className="p-4 bg-emerald-50 rounded-lg border border-emerald-100"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3 min-w-0">
-                              <FileText className="w-8 h-8 text-emerald-600 flex-shrink-0" />
-                              <div className="min-w-0">
-                                <p className="font-medium text-gray-900 truncate">
-                                  {doc.name || 'Attached Document'}
-                                </p>
-                                <p className="text-sm text-gray-500">Click to download</p>
+                      {docs.map((doc, idx) => {
+                        const badge = getFileBadge(doc.url || doc.name);
+                        return (
+                          <div
+                            key={`${doc.url}-${idx}`}
+                            className="p-4 bg-white rounded-lg border border-gray-200 hover:border-emerald-300 hover:shadow-sm transition-all"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-3 min-w-0">
+                                <div
+                                  className={`flex-shrink-0 w-12 h-12 rounded-md ${badge.icon} text-white flex items-center justify-center font-bold text-xs tracking-wide shadow-sm`}
+                                  data-testid={`news-attachment-badge-${badge.label.toLowerCase()}`}
+                                >
+                                  {badge.label}
+                                </div>
+                                <div className="min-w-0">
+                                  <p className="font-medium text-gray-900 truncate">
+                                    {doc.name || 'Attached Document'}
+                                  </p>
+                                  <p className="text-sm text-gray-500">
+                                    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium border ${badge.badge} mr-2`}>
+                                      {badge.label}
+                                    </span>
+                                    Click to download
+                                  </p>
+                                </div>
                               </div>
+                              <a
+                                href={doc.url}
+                                download
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors flex-shrink-0 ml-3"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <Download className="w-4 h-4 mr-2" />
+                                Download
+                              </a>
                             </div>
-                            <a
-                              href={doc.url}
-                              download
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-medium transition-colors flex-shrink-0 ml-3"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <Download className="w-4 h-4 mr-2" />
-                              Download
-                            </a>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   );
                 })()}
