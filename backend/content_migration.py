@@ -707,32 +707,33 @@ async def migrate_custom_content():
             logger.info(f"Step 1: Skipping services (already have {existing_services})")
         
         # =============================================
-        # STEP 2: Populate PROJECTS (upsert new ones)
+        # STEP 2: Populate PROJECTS (true upsert - always ensures data exists)
         # =============================================
         logger.info("Step 2: Migrating projects...")
-        if existing_projects == 0:
-            # First time - insert all projects
-            for project in PROJECTS_DATA:
-                project["createdAt"] = datetime.utcnow()
-                project["updatedAt"] = datetime.utcnow()
-                await projects_collection.insert_one(project)
+        projects_added = 0
+        projects_updated = 0
+        for project in PROJECTS_DATA:
+            project_data = {**project}  # Copy to avoid mutating original
+            project_data["updatedAt"] = datetime.utcnow()
+            
+            # Use update_one with upsert=True to always ensure the project exists
+            result = await projects_collection.update_one(
+                {"id": project["id"]},
+                {
+                    "$set": project_data,
+                    "$setOnInsert": {"createdAt": datetime.utcnow()}
+                },
+                upsert=True
+            )
+            
+            if result.upserted_id:
                 logger.info(f"  ✓ Inserted project: {project['title']}")
-            logger.info(f"  Total projects: {len(PROJECTS_DATA)}")
-        else:
-            # Add any missing projects (upsert by id)
-            projects_added = 0
-            for project in PROJECTS_DATA:
-                existing = await projects_collection.find_one({"id": project["id"]})
-                if not existing:
-                    project["createdAt"] = datetime.utcnow()
-                    project["updatedAt"] = datetime.utcnow()
-                    await projects_collection.insert_one(project)
-                    logger.info(f"  ✓ Added new project: {project['title']}")
-                    projects_added += 1
-            if projects_added > 0:
-                logger.info(f"  Added {projects_added} new project(s)")
-            else:
-                logger.info(f"Step 2: All projects already exist ({existing_projects} projects)")
+                projects_added += 1
+            elif result.modified_count > 0:
+                logger.info(f"  ✓ Updated project: {project['title']}")
+                projects_updated += 1
+        
+        logger.info(f"  Projects: {projects_added} added, {projects_updated} updated, {len(PROJECTS_DATA) - projects_added - projects_updated} unchanged")
         
         # =============================================
         # STEP 3: Update SETTINGS (upsert - safe to run)
@@ -747,25 +748,34 @@ async def migrate_custom_content():
             logger.info(f"  ✓ Updated setting: {key}")
         
         # =============================================
-        # STEP 4: Add missing BUTTONS (upsert - safe to run)
-        # This adds new button configs without overwriting existing ones
+        # STEP 4: BUTTONS (true upsert - always ensures buttons exist)
+        # This ensures all button configs are present and up-to-date
         # =============================================
-        logger.info("Step 4: Adding missing button configurations...")
+        logger.info("Step 4: Migrating button configurations...")
         buttons_added = 0
+        buttons_updated = 0
         for btn in BUTTON_CONFIGS:
-            # Check if button already exists
-            existing = await button_configs_collection.find_one({"buttonId": btn["buttonId"]})
-            if not existing:
-                btn["createdAt"] = datetime.utcnow()
-                btn["updatedAt"] = datetime.utcnow()
-                await button_configs_collection.insert_one(btn)
-                logger.info(f"  ✓ Added new button: {btn['buttonId']}")
+            btn_data = {**btn}  # Copy to avoid mutating original
+            btn_data["updatedAt"] = datetime.utcnow()
+            
+            # Use update_one with upsert=True
+            result = await button_configs_collection.update_one(
+                {"buttonId": btn["buttonId"]},
+                {
+                    "$set": btn_data,
+                    "$setOnInsert": {"createdAt": datetime.utcnow()}
+                },
+                upsert=True
+            )
+            
+            if result.upserted_id:
+                logger.info(f"  ✓ Inserted button: {btn['buttonId']}")
                 buttons_added += 1
+            elif result.modified_count > 0:
+                logger.info(f"  ✓ Updated button: {btn['buttonId']}")
+                buttons_updated += 1
         
-        if buttons_added > 0:
-            logger.info(f"  Added {buttons_added} new buttons")
-        else:
-            logger.info(f"  All buttons already exist ({existing_buttons} buttons)")
+        logger.info(f"  Buttons: {buttons_added} added, {buttons_updated} updated, {len(BUTTON_CONFIGS) - buttons_added - buttons_updated} unchanged")
         
         logger.info("=" * 60)
         logger.info("Content migration completed successfully!")

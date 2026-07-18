@@ -34,6 +34,11 @@ Build a modern, professional website for "Three Thirds Society" (3ts.gr), a soci
 ## What's Been Implemented
 
 ### July 18, 2026
+- **Content Migration Fix (P0 Bug)**: Fixed production sync issue for new projects
+  - Changed migration logic from "skip if exists" to **true upsert** (insert or update)
+  - Projects and buttons now guaranteed to sync to production database on server startup
+  - This ensures "Social Grocery of Souli" and all other content appears on live site after deployment
+  
 - **Social Grocery of Souli Project**: Created new project "Κοινωνικό Παντοπωλείο Σουλίου" with:
   - ESPA 2021-2027 logo extracted from espa-epirus.gr
   - Full Greek description about Social Grocery initiative
