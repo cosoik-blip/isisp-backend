@@ -135,6 +135,18 @@ PROJECTS_DATA = [
         "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop",
         "isActive": True,
         "order": 4
+    },
+    {
+        "id": "970d60e6-de39-422f-9336-46bf3307159d",
+        "title": "Social Grocery of Souli - Κοινωνικό Παντοπωλείο Σουλίου",
+        "description": "Η πράξη αφορά τη δημιουργία και λειτουργία δομής παροχής βασικών αγαθών (Κοινωνικό Παντοπωλείο) στο Δήμο Σουλίου, με στόχο την κάλυψη βασικών βιοτικών αναγκών των ωφελουμένων νοικοκυριών που διαβιούν σε συνθήκες ακραίας φτώχειας, φτώχειας ή απειλούνται από φτώχεια, καθώς και την εξασφάλιση της κοινωνικής τους ένταξης.",
+        "impact": "Supporting vulnerable households in the Municipality of Souli with essential goods and social integration services",
+        "region": "Ήπειρος",
+        "year": "2021-2027",
+        "category": "Social Economy",
+        "image": "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=800&h=600&fit=crop",
+        "isActive": True,
+        "order": 5
     }
 ]
 
@@ -619,6 +631,45 @@ Edit this content in the Dashboard → Buttons section to add information about 
 Edit this content in the Dashboard → Buttons section to add information about the ECHO project.""",
         "buttonStyle": "outline",
         "order": 1
+    },
+    # Social Grocery of Souli Project Learn More button
+    {
+        "buttonId": "project_learn_more_970d60e6-de39-422f-9336-46bf3307159d",
+        "section": "projects",
+        "label": "Learn More",
+        "isVisible": True,
+        "clickAction": "show_message",
+        "clickMessage": """Η κοινωνία μας, τα τελευταία χρόνια λόγω και της οικονομικής κρίσης, χρειάζεται μία μεγαλύτερη στήριξη και ιδίως προς τους ανθρώπους που το έχουν πραγματική ανάγκη. Για αυτό το λόγο δημιουργήθηκε το Κοινωνικό Παντοπωλείο του Δήμου Σουλίου το Μάιο του 2017, με σκοπό να προσφέρει βοήθεια σε άτομα από ευπαθείς ομάδες, παρέχοντας είδη που καλύπτουν βασικές ανάγκες.
+
+Τα είδη που προσφέρει διακρίνονται σε τρείς κατηγορίες:
+
+• Τρόφιμα και είδη παντοπωλείου συσκευασμένα, είδη ατομικής υγιεινής, κατεψυγμένα προϊόντα
+• Είδη ένδυσης και υπόδησης, είδη οικιακού εξοπλισμού, παιχνίδια κ.λπ. καινούρια ή «δεύτερο χέρι»
+• Είδη ψυχαγωγίας όπως βιβλία, cd – dvd, για την κάλυψη αναγκών μάθησης και πολιτισμού.
+
+Τα είδη αυτά τα διανέμει σε άτομα που αποδεδειγμένα δεν μπορούν να καλύψουν τις ανάγκες τους σε βασικά αγαθά.
+
+Το Κοινωνικό Παντοπωλείο βρίσκεται στο Δημοτικό Κατάστημα Αχέροντα στην τοπική κοινότητα Γαρδικίου, ενώ συνδέεται με τοπικές επιχειρήσεις και την τοπική κοινωνία για την συλλογή των παραπάνω προϊόντων και έχει το ακόλουθο ωράριο λειτουργίας:
+
+Δευτέρα έως Παρασκευή 07:00 – 15:00
+
+Το Κοινωνικό μας Παντοπωλείο έχει ενταχθεί στο Πρόγραμμα «Ήπειρος 2021-2027» με τίτλο Πράξης: «Συνέχιση Λειτουργίας Κοινωνικού Παντοπωλείου Δήμου Σουλίου» με Κωδικό ΟΠΣ 6002479.
+
+Δωρεές – Χορηγίες
+
+Πώς μπορώ να προσφέρω/βοηθήσω;
+
+Κάνοντας απευθείας δωρεές αγαθών ή χορηγίες στο Κοινωνικό Παντοπωλείο μας. Ακόμα μπορεί να γίνει κάποια δικτύωση με προμηθευτες, για κάποια διαφήμιση – προβολή. Έτσι παρέχετε σε άπορους συμπολίτες σας, την δυνατότητα να έχουν πρόσβαση σε αγαθά που τα έχουν ανάγκη.
+
+Παρακάτω θα βρείτε την φόρμα όπου μπορείτε να συμπληρώσετε τα στοιχεία σας και να επικοινωνήσουμε μαζί σας.
+
+Επίσης, εάν επιθυμείτε να προσφέρετε μεγάλες ποσότητες προϊόντων στο Κοινωνικό Παντοπωλείο μπορείτε να απευθύνεστε στο 2666360305, όπου θα σας δίνονται οι απαραίτητες πληροφορίες για τον τρόπο αποστολής – παραλαβής των προσφερομένων ειδών.
+
+Επικοινωνία
+
+Για περισσότερες πληροφορίες σχετικά με το Κοινωνικό Παντοπωλείο μπορείτε να απευθύνεστε στο 2666360305.""",
+        "buttonStyle": "outline",
+        "order": 1
     }
 ]
 
@@ -656,10 +707,11 @@ async def migrate_custom_content():
             logger.info(f"Step 1: Skipping services (already have {existing_services})")
         
         # =============================================
-        # STEP 2: Populate PROJECTS (only if empty)
+        # STEP 2: Populate PROJECTS (upsert new ones)
         # =============================================
+        logger.info("Step 2: Migrating projects...")
         if existing_projects == 0:
-            logger.info("Step 2: Migrating projects...")
+            # First time - insert all projects
             for project in PROJECTS_DATA:
                 project["createdAt"] = datetime.utcnow()
                 project["updatedAt"] = datetime.utcnow()
@@ -667,7 +719,20 @@ async def migrate_custom_content():
                 logger.info(f"  ✓ Inserted project: {project['title']}")
             logger.info(f"  Total projects: {len(PROJECTS_DATA)}")
         else:
-            logger.info(f"Step 2: Skipping projects (already have {existing_projects})")
+            # Add any missing projects (upsert by id)
+            projects_added = 0
+            for project in PROJECTS_DATA:
+                existing = await projects_collection.find_one({"id": project["id"]})
+                if not existing:
+                    project["createdAt"] = datetime.utcnow()
+                    project["updatedAt"] = datetime.utcnow()
+                    await projects_collection.insert_one(project)
+                    logger.info(f"  ✓ Added new project: {project['title']}")
+                    projects_added += 1
+            if projects_added > 0:
+                logger.info(f"  Added {projects_added} new project(s)")
+            else:
+                logger.info(f"Step 2: All projects already exist ({existing_projects} projects)")
         
         # =============================================
         # STEP 3: Update SETTINGS (upsert - safe to run)

@@ -1,0 +1,16 @@
+{
+  "summary": "Verified Social Grocery of Souli project sync fix. Backend GET /api/projects/ returns the project (id 970d60e6-...), correct Greek title 'Social Grocery of Souli - Κοινωνικό Παντοπωλείο Σουλίου', category 'Social Economy', Greek description mentioning Δήμο Σουλίου, isActive true, and an image URL. Learn More button (buttonId project_learn_more_970d60e6-de39-422f-9336-46bf3307159d) exists, isVisible true, clickAction show_message with full Greek popup text and embedded ΕΣΠΑ 2021-2027 image markdown. content_migration.py contains the project in PROJECTS_DATA and uses upsert-by-id logic for projects and buttons. Frontend renders the card in Projects section with object-contain image styling; clicking Learn More opens a modal displaying the ΕΣΠΑ header image and full Greek Κοινωνικό Παντοπωλείο narrative.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": ["/app/backend/tests/test_social_grocery.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": ["User should re-upload the ΠΡΟΓΡΑΜΜΑ ΗΠΕΙΡΟΣ logo in production if the current image path /api/upload/images/d644a93f-e277-4f8d-89b9-d70daffcecc4.webp is not present in production GridFS (per agent-to-agent note). In the current preview environment tested, the image loads correctly."],
+  "critical_code_review_comments": [],
+  "updated_files": ["/app/backend/tests/test_social_grocery.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "admin / 254TFD98 (not required for this test; endpoints are public)",
+  "seed_data_creation": "None. Migration script already contains the project.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "5/5 pytest passing in /app/backend/tests/test_social_grocery.py. Playwright verified card + Learn More popup on Projects section. Migration upsert logic is at content_migration.py lines 710-735 (projects) and 750-768 (buttons).",
+  "rca of the issue": "Original bug: project existed only in preview DB. Fix in content_migration.py: (a) added Social Grocery entry to PROJECTS_DATA (line 140), (b) added Learn More button to BUTTON_CONFIGS (line 635), (c) changed project migration from 'skip when collection non-empty' to 'upsert by id' so new PROJECTS_DATA entries are inserted on subsequent deploys. Verified working end-to-end."
+}
