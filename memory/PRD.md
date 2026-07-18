@@ -33,6 +33,22 @@ Build a modern, professional website for "Three Thirds Society" (3ts.gr), a soci
 
 ## What's Been Implemented
 
+### July 18, 2026
+- **Social Grocery of Souli Project**: Created new project "Κοινωνικό Παντοπωλείο Σουλίου" with:
+  - ESPA 2021-2027 logo extracted from espa-epirus.gr
+  - Full Greek description about Social Grocery initiative
+  - Bilingual title (English + Greek)
+  - Proper categorization (Social Economy, Ήπειρος region)
+
+### Previous Sessions (Completed)
+- **Multiple Document Uploads**: News articles now support multiple PDF/DOCX/XLS attachments
+- **Markdown Hyperlinks**: News content supports `[text](url)` markdown links
+- **Greek Filename Support**: RFC 5987 Content-Disposition headers for non-ASCII filenames
+- **Orphan File Cleanup**: Automatic GridFS cleanup when articles/projects are modified/deleted
+- **Excel File Support**: Added .xls and .xlsx upload support
+- **Format Badges**: Color-coded file type badges (PDF=red, DOC=blue, XLS=green)
+- **Cache Control Fix**: Reduced max-age from 1 year to 1 hour for uploaded files
+
 ### January 14, 2026
 - **Image Upload Feature**: Added direct image upload for Projects and News sections
   - File upload endpoint at `/api/upload/image`
@@ -85,10 +101,14 @@ Build a modern, professional website for "Three Thirds Society" (3ts.gr), a soci
 ## Backlog / Future Tasks
 
 ### P1 - Upcoming
-- **Video Embedding**: User wants a 1-minute video on the website (waiting for video URL/file from user)
-- **Backend Testing**: Run comprehensive automated tests
+- **Format Badges on Teasers**: Add compact PDF/XLS/DOC chips to News article card teasers
+- **Backend Testing**: Run comprehensive automated tests with `testing_agent_v3_fork` (critical - significant untested backend changes)
 
 ### P2 - Future
+- **Video Embedding**: User wants a 1-minute video on the website (waiting for video URL/file from user)
+- **Multiple Admin Accounts**: Currently single admin via `.env`
+
+### P3 - Backlog
 - Additional content sections as needed
 - Newsletter functionality implementation
 - SEO optimizations
