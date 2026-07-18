@@ -10,6 +10,21 @@ const API = `${BACKEND_URL}/api`;
 const MessageModal = ({ isOpen, onClose, message }) => {
   if (!isOpen || !message) return null;
   
+  // Parse message for image syntax: ![alt](url) at the beginning
+  const parseMessageWithImage = (msg) => {
+    // Match markdown image syntax at the start: ![alt text](image_url)
+    const imageMatch = msg.match(/^!\[([^\]]*)\]\(([^)]+)\)\n*/);
+    if (imageMatch) {
+      const altText = imageMatch[1];
+      const imageUrl = imageMatch[2];
+      const textContent = msg.slice(imageMatch[0].length);
+      return { imageUrl, altText, textContent };
+    }
+    return { imageUrl: null, altText: null, textContent: msg };
+  };
+  
+  const { imageUrl, altText, textContent } = parseMessageWithImage(message);
+  
   return ReactDOM.createPortal(
     <div 
       className="fixed inset-0 flex items-center justify-center p-4"
@@ -46,7 +61,17 @@ const MessageModal = ({ isOpen, onClose, message }) => {
         
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
-          <p className="text-gray-600 leading-relaxed whitespace-pre-line">{message}</p>
+          {/* Render image at the top if present */}
+          {imageUrl && (
+            <div className="mb-4 flex justify-center">
+              <img 
+                src={imageUrl.startsWith('/') ? `${BACKEND_URL}${imageUrl}` : imageUrl} 
+                alt={altText || 'Logo'} 
+                className="max-w-full h-auto max-h-24 object-contain"
+              />
+            </div>
+          )}
+          <p className="text-gray-600 leading-relaxed whitespace-pre-line">{textContent}</p>
         </div>
         
         {/* Footer */}
