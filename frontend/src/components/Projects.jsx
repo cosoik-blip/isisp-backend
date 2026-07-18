@@ -128,11 +128,11 @@ export const Projects = () => {
               className="group overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:scale-105 border-0 shadow-lg bg-white"
             >
               {/* Project Image */}
-              <div className="relative h-64 overflow-hidden">
+              <div className="relative h-64 overflow-hidden bg-white">
                 <img 
                   src={getProjectImage(project)} 
                   alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700 p-2"
                   onError={(e) => {
                     // If the image fails to load, fall back to category default
                     e.target.src = CATEGORY_DEFAULT_IMAGES[project.category] || CATEGORY_DEFAULT_IMAGES['default'];
